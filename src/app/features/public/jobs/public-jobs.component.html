@@ -1,0 +1,129 @@
+<app-public-navbar></app-public-navbar>
+
+<!-- PAGE HEADER -->
+<header class="bg-gradient-to-b from-[#0F172A] to-[#1E293B] pt-28 pb-12 px-6">
+  <div class="max-w-4xl mx-auto text-center">
+    <h1 class="text-3xl sm:text-4xl font-bold text-white">Offres d'emploi disponibles</h1>
+    <p class="text-slate-400 mt-2 text-base">Trouvez votre prochaine opportunité</p>
+    
+    <!-- Search Bar -->
+    <div class="mt-8 max-w-xl mx-auto relative">
+      <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+        <!-- Loupe icon -->
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </span>
+      <input type="text"
+             [(ngModel)]="searchQuery"
+             (input)="onSearch()"
+             class="w-full bg-[#1E293B] border border-slate-700 rounded-xl pl-12 pr-4 py-3.5 text-white focus:outline-none focus:border-[#6366F1] transition-all placeholder:text-slate-500 text-sm sm:text-base"
+             placeholder="Rechercher un poste, une compétence, un lieu...">
+    </div>
+  </div>
+</header>
+
+<!-- INFO BANNER -->
+<section class="max-w-7xl mx-auto px-6 mt-6">
+  <div class="max-w-4xl mx-auto bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
+    <div class="flex items-center gap-3">
+      <span class="text-xl">🔒</span>
+      <span class="text-slate-300">Connectez-vous pour comparer ces offres avec votre CV.</span>
+    </div>
+    <button (click)="router.navigate(['/login'])" class="text-amber-400 font-semibold hover:text-amber-300 transition-colors bg-transparent border-0 cursor-pointer whitespace-nowrap">
+      Se connecter →
+    </button>
+  </div>
+</section>
+
+<!-- JOBS GRID / RESULTS -->
+<main class="bg-[#0F172A] py-12 px-6">
+  <div class="max-w-7xl mx-auto">
+    <!-- If no jobs found -->
+    <div *ngIf="filteredJobs.length === 0" class="text-center py-20">
+      <span class="text-6xl block mb-4">🔍</span>
+      <h3 class="text-white font-bold text-xl">Aucune offre trouvée</h3>
+      <p class="text-slate-400 mt-2 text-sm">Essayez de modifier ou de réinitialiser vos filtres de recherche.</p>
+      <button (click)="resetSearch()" class="border border-slate-600 text-white font-semibold px-5 py-2 rounded-lg mt-6 hover:bg-slate-800 transition-all cursor-pointer">
+        Réinitialiser
+      </button>
+    </div>
+
+    <!-- If jobs are found -->
+    <div *ngIf="filteredJobs.length > 0">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngFor="let job of paginatedJobs" 
+             [routerLink]="['/jobs', job.id]"
+             class="bg-[#1E293B] rounded-xl p-6 border border-slate-700 hover:border-indigo-500/50 transition-all duration-200 cursor-pointer flex flex-col justify-between hover:shadow-lg hover:shadow-indigo-500/5">
+          <div>
+            <!-- Top Row -->
+            <div class="flex justify-between items-start gap-4">
+              <h2 class="text-lg font-bold text-white hover:text-indigo-400 transition-colors line-clamp-1">{{ job.title }}</h2>
+              <span class="bg-slate-700/80 text-slate-300 rounded-full text-xs px-3 py-1 font-medium flex items-center gap-1 shrink-0">
+                <span>📍</span> {{ job.location }}
+              </span>
+            </div>
+
+            <!-- Description -->
+            <p class="text-sm text-slate-400 mt-3 description-clamp leading-relaxed">
+              {{ job.description }}
+            </p>
+
+            <!-- Skills Row -->
+            <div class="mt-5 flex flex-wrap gap-2">
+              <span *ngFor="let skill of getVisibleSkills(job.skills)" class="bg-indigo-500/10 text-indigo-300 rounded-full text-xs px-3 py-1 font-medium">
+                {{ skill }}
+              </span>
+              <span *ngIf="getExtraCount(job.skills) > 0" class="bg-slate-700/60 text-slate-400 rounded-full text-xs px-3 py-1 font-medium">
+                +{{ getExtraCount(job.skills) }} autres
+              </span>
+            </div>
+          </div>
+
+          <!-- Footer/Action Row -->
+          <div>
+            <div class="border-t border-slate-800/80 mt-5 pt-4"></div>
+            <div class="flex justify-between items-center gap-4">
+              <span class="text-xs text-slate-500 font-medium">
+                📅 {{ getTimeAgo(job.createdAt) }}
+              </span>
+              <div class="flex gap-2" (click)="$event.stopPropagation()">
+                <a [routerLink]="['/jobs', job.id]" class="border border-slate-600 text-slate-300 text-xs font-semibold px-3 py-2 rounded-lg hover:border-indigo-500 hover:text-white transition-all text-center">
+                  Voir le détail
+                </a>
+                <button (click)="router.navigate(['/login'])" class="bg-indigo-600 text-white text-xs font-bold px-3 py-2 rounded-lg hover:bg-indigo-500 transition-all cursor-pointer">
+                  Postuler →
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div *ngIf="totalPages > 1" class="mt-12 flex justify-center items-center gap-1.5">
+        <!-- Prev Button -->
+        <button (click)="goToPage(currentPage - 1)" 
+                [disabled]="currentPage === 1"
+                class="bg-slate-800 text-slate-400 hover:bg-slate-700 disabled:opacity-50 disabled:hover:bg-slate-800 rounded-lg px-3.5 py-2 text-sm font-semibold transition-all cursor-pointer">
+          Précédent
+        </button>
+
+        <!-- Page Numbers -->
+        <button *ngFor="let page of getPagesArray()"
+                (click)="goToPage(page)"
+                [ngClass]="{'bg-indigo-600 text-white': currentPage === page, 'bg-slate-800 text-slate-400 hover:bg-slate-700': currentPage !== page}"
+                class="rounded-lg w-10 h-10 flex items-center justify-center text-sm font-semibold transition-all cursor-pointer">
+          {{ page }}
+        </button>
+
+        <!-- Next Button -->
+        <button (click)="goToPage(currentPage + 1)" 
+                [disabled]="currentPage === totalPages"
+                class="bg-slate-800 text-slate-400 hover:bg-slate-700 disabled:opacity-50 disabled:hover:bg-slate-800 rounded-lg px-3.5 py-2 text-sm font-semibold transition-all cursor-pointer">
+          Suivant
+        </button>
+      </div>
+    </div>
+  </div>
+</main>

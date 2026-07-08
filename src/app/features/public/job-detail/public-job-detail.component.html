@@ -1,0 +1,103 @@
+<app-public-navbar></app-public-navbar>
+
+<div class="max-w-3xl mx-auto px-6 pt-28 pb-16" *ngIf="job">
+  <!-- Back Button -->
+  <button (click)="router.navigate(['/jobs'])" class="text-slate-400 hover:text-white flex items-center gap-2 mb-8 bg-transparent border-0 cursor-pointer text-sm font-medium transition-colors">
+    ← Retour aux offres
+  </button>
+
+  <!-- JOB HEADER CARD -->
+  <div class="bg-[#1E293B] rounded-xl p-8 border border-slate-700/80 shadow-md">
+    <h1 class="text-3xl font-bold text-white leading-tight">{{ job.title }}</h1>
+    
+    <!-- Meta Row -->
+    <div class="flex flex-wrap gap-3 mt-4 items-center">
+      <span class="bg-slate-700 text-slate-300 rounded-full px-3 py-1 text-sm font-medium">
+        📍 {{ job.location }}
+      </span>
+      <span class="text-sm text-slate-400">
+        📅 Publié le {{ formatDate(job.createdAt) }}
+      </span>
+      <span class="bg-emerald-500/20 text-emerald-400 rounded-full px-3 py-1 text-sm font-medium">
+        ✅ Active
+      </span>
+    </div>
+
+    <div class="border-t border-slate-700 my-6"></div>
+
+    <!-- Required Skills -->
+    <h2 class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-3">Compétences requises</h2>
+    <div class="flex flex-wrap gap-2">
+      <span *ngFor="let skill of job.skills" class="bg-indigo-500/20 text-indigo-300 rounded-full text-sm px-4 py-1.5 font-medium">
+        {{ skill }}
+      </span>
+    </div>
+  </div>
+
+  <!-- DESCRIPTION CARD -->
+  <div class="bg-[#1E293B] rounded-xl p-8 mt-4 border border-slate-700/80 shadow-md">
+    <h2 class="text-xl font-bold text-white mb-4">Description du poste</h2>
+    <p class="text-slate-400 leading-relaxed text-base whitespace-pre-line">
+      {{ job.description }}
+    </p>
+  </div>
+
+  <!-- CTA CARD -->
+  <div class="cta-card mt-4 rounded-xl p-8 shadow-lg flex flex-col md:flex-row gap-6 items-center justify-between">
+    <!-- Left -->
+    <div class="text-center md:text-left">
+      <div class="text-3xl mb-2">🔒</div>
+      <h3 class="text-xl font-bold text-white">Intéressé par ce poste ?</h3>
+      <p class="text-white/80 text-sm mt-2 max-w-md">
+        Connectez-vous pour comparer cette offre avec vos compétences et soumettre votre candidature.
+      </p>
+    </div>
+    <!-- Right -->
+    <div class="flex flex-col gap-3 min-w-[200px] w-full md:w-auto">
+      <button (click)="router.navigate(['/login'])" class="bg-white text-indigo-600 font-bold w-full py-3 rounded-lg hover:bg-slate-100 transition-all cursor-pointer border-0">
+        Se connecter
+      </button>
+      <button (click)="router.navigate(['/register'])" class="border-2 border-white text-white font-bold w-full py-3 rounded-lg hover:bg-white/10 transition-all cursor-pointer bg-transparent">
+        Créer un compte
+      </button>
+    </div>
+  </div>
+
+  <!-- SIMILAR JOBS -->
+  <section *ngIf="similarJobs.length > 0" class="mt-12">
+    <h2 class="text-2xl font-bold text-white mb-6">Offres similaires</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div *ngFor="let sJob of similarJobs"
+           [routerLink]="['/jobs', sJob.id]"
+           class="bg-[#1E293B] rounded-xl p-5 border border-slate-700 hover:border-indigo-500/50 transition-all duration-200 cursor-pointer flex flex-col justify-between hover:shadow-lg">
+        <div>
+          <!-- Title & Location -->
+          <div class="flex justify-between items-start gap-2 mb-3">
+            <h3 class="text-white font-bold text-sm hover:text-indigo-400 transition-colors line-clamp-1">{{ sJob.title }}</h3>
+          </div>
+          <span class="bg-slate-700/80 text-slate-300 rounded-full text-[10px] px-2 py-0.5 font-medium inline-block mb-3">
+            📍 {{ sJob.location }}
+          </span>
+
+          <!-- Skills (First 3) -->
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span *ngFor="let skill of getVisibleSkills(sJob.skills)" class="bg-indigo-500/10 text-indigo-300 rounded-full text-[10px] px-2 py-0.5 font-medium">
+              {{ skill }}
+            </span>
+            <span *ngIf="getExtraCount(sJob.skills) > 0" class="bg-slate-700/60 text-slate-400 rounded-full text-[10px] px-2 py-0.5 font-medium">
+              +{{ getExtraCount(sJob.skills) }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Time Ago -->
+        <div class="border-t border-slate-800/80 pt-3">
+          <span class="text-[10px] text-slate-500 font-medium">
+            📅 {{ getTimeAgo(sJob.createdAt) }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
