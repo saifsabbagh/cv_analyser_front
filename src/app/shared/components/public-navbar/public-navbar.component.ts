@@ -1,11 +1,13 @@
 import { Component, HostListener, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ThemeToggleComponent } from "../theme-toggle/theme-toggle.component";
+// import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
 
 @Component({
   selector: 'app-public-navbar',
-  standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, ThemeToggleComponent],
+  // imports: [CommonModule, RouterLink, ThemeToggleComponent],
   templateUrl: './public-navbar.component.html',
   styleUrl: './public-navbar.component.scss'
 })

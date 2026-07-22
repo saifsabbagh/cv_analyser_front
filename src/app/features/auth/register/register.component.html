@@ -4,20 +4,20 @@
   <div class="glow-decoration absolute top-[-200px] right-[-200px] pointer-events-none opacity-50"></div>
 
   <!-- Centered Card -->
-  <div class="bg-[#1E293B] rounded-2xl shadow-2xl border border-slate-700/80 w-full max-w-[460px] mx-auto p-6 sm:p-8 md:p-10 relative z-10">
+  <div class="bg-surface rounded-2xl shadow-2xl border border-border/80 w-full max-w-[420px] mx-auto p-6 sm:p-8 relative z-10">
     <!-- Logo & Header -->
     <div class="text-center">
-      <div class="text-4xl text-[#6366F1] mb-2 filter drop-shadow-[0_0_10px_rgba(99,102,241,0.3)]">📊</div>
-      <h1 class="text-xl font-bold text-white tracking-wide">CV Analyzer</h1>
-      <p class="text-xs text-slate-400 mt-1">Intelligence Artificielle de Recrutement</p>
+      <div class="text-4xl text-primary mb-2 filter drop-shadow-[0_0_10px_rgba(99,102,241,0.3)]">📊</div>
+      <h1 class="text-xl font-bold text-text tracking-wide">CV Analyzer</h1>
+      <p class="text-xs text-text-secondary mt-1">Intelligence Artificielle de Recrutement</p>
     </div>
 
-    <div class="border-t border-slate-700/50 my-6"></div>
+    <div class="border-t border-border/50 my-6"></div>
 
-    <h2 class="text-lg font-semibold text-white text-center mb-6">Créez votre compte gratuitement</h2>
+    <h2 class="text-lg font-semibold text-text text-center mb-6">Créez votre compte gratuitement</h2>
 
     <!-- Error Message -->
-    <div *ngIf="errorMessage" class="bg-red-500/10 border border-red-500/30 text-red-400 rounded-lg p-3 text-sm mb-4 text-center">
+    <div *ngIf="errorMessage" class="bg-error/10 border border-error/30 text-error rounded-lg p-3 text-sm mb-4 text-center">
       {{ errorMessage }}
     </div>
 
@@ -26,54 +26,54 @@
 
       <!-- Name Field -->
       <div>
-        <label for="name" class="text-slate-300 text-xs font-semibold uppercase tracking-wider block mb-1.5">
+        <label for="name" class="text-text-secondary text-xs font-semibold uppercase tracking-wider block mb-1.5">
           Nom complet
         </label>
         <div class="relative">
-          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-base pointer-events-none select-none">👤</span>
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary text-base pointer-events-none select-none">👤</span>
           <input id="name"
                  type="text"
                  formControlName="name"
-                 [ngClass]="{'border-red-500/80 focus:border-red-500': isFieldInvalid('name')}"
-                 class="w-full bg-[#0F172A] border border-slate-700 rounded-lg pl-10 pr-4 py-3 text-white focus:outline-none focus:border-[#6366F1] transition-all placeholder:text-slate-600 text-sm"
+                 [ngClass]="{'border-error/80 focus:border-error': isFieldInvalid('name')}"
+                 class="w-full bg-bg border border-border rounded-lg pl-10 pr-4 py-3 text-text focus:outline-none focus:border-primary transition-all placeholder:text-text-secondary/50 text-sm"
                  placeholder="Jean Dupont">
         </div>
-        <span *ngIf="isFieldInvalid('name')" class="text-red-400 text-xs mt-1 block">
+        <span *ngIf="isFieldInvalid('name')" class="text-error text-xs mt-1 block">
           {{ getFieldError('name') }}
         </span>
       </div>
 
       <!-- Email Field -->
       <div>
-        <label for="email" class="text-slate-300 text-xs font-semibold uppercase tracking-wider block mb-1.5">
+        <label for="email" class="text-text-secondary text-xs font-semibold uppercase tracking-wider block mb-1.5">
           Email professionnel
         </label>
         <input id="email"
                type="email"
                formControlName="email"
-               [ngClass]="{'border-red-500/80 focus:border-red-500': isFieldInvalid('email')}"
-               class="w-full bg-[#0F172A] border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#6366F1] transition-all placeholder:text-slate-600 text-sm"
+               [ngClass]="{'border-error/80 focus:border-error': isFieldInvalid('email')}"
+               class="w-full bg-bg border border-border rounded-lg px-4 py-3 text-text focus:outline-none focus:border-primary transition-all placeholder:text-text-secondary/50 text-sm"
                placeholder="nom@entreprise.com">
-        <span *ngIf="isFieldInvalid('email')" class="text-red-400 text-xs mt-1 block">
+        <span *ngIf="isFieldInvalid('email')" class="text-error text-xs mt-1 block">
           {{ getFieldError('email') }}
         </span>
       </div>
 
       <!-- Password Field + Strength Bar -->
       <div>
-        <label for="password" class="text-slate-300 text-xs font-semibold uppercase tracking-wider block mb-1.5">
+        <label for="password" class="text-text-secondary text-xs font-semibold uppercase tracking-wider block mb-1.5">
           Mot de passe
         </label>
         <div class="relative">
           <input id="password"
                  [type]="showPassword ? 'text' : 'password'"
                  formControlName="password"
-                 [ngClass]="{'border-red-500/80 focus:border-red-500': isFieldInvalid('password')}"
-                 class="w-full bg-[#0F172A] border border-slate-700 rounded-lg pl-4 pr-12 py-3 text-white focus:outline-none focus:border-[#6366F1] transition-all placeholder:text-slate-600 text-sm"
+                 [ngClass]="{'border-error/80 focus:border-error': isFieldInvalid('password')}"
+                 class="w-full bg-bg border border-border rounded-lg pl-4 pr-12 py-3 text-text focus:outline-none focus:border-primary transition-all placeholder:text-text-secondary/50 text-sm"
                  placeholder="Minimum 8 caractères">
           <button type="button"
                   (click)="showPassword = !showPassword"
-                  class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors bg-transparent border-0 cursor-pointer p-1"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-text transition-colors bg-transparent border-0 cursor-pointer p-1"
                   aria-label="Afficher/masquer le mot de passe">
             <svg *ngIf="!showPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -84,7 +84,7 @@
             </svg>
           </button>
         </div>
-        <span *ngIf="isFieldInvalid('password')" class="text-red-400 text-xs mt-1 block">
+        <span *ngIf="isFieldInvalid('password')" class="text-error text-xs mt-1 block">
           {{ getFieldError('password') }}
         </span>
 
@@ -98,10 +98,9 @@
             </div>
             <span class="text-xs ml-2 font-medium strength-label"
                   [ngClass]="{
-                    'text-red-400': getPasswordStrength() <= 1,
-                    'text-orange-400': getPasswordStrength() === 2,
-                    'text-yellow-400': getPasswordStrength() === 3,
-                    'text-emerald-400': getPasswordStrength() === 4
+                    'text-error': getPasswordStrength() <= 1,
+                    'text-warning': getPasswordStrength() === 2 || getPasswordStrength() === 3,
+                    'text-success': getPasswordStrength() === 4
                   }">
               {{ getStrengthLabel() }}
             </span>
@@ -111,19 +110,19 @@
 
       <!-- Confirm Password Field -->
       <div>
-        <label for="confirmPassword" class="text-slate-300 text-xs font-semibold uppercase tracking-wider block mb-1.5">
+        <label for="confirmPassword" class="text-text-secondary text-xs font-semibold uppercase tracking-wider block mb-1.5">
           Confirmer le mot de passe
         </label>
         <div class="relative">
           <input id="confirmPassword"
                  [type]="showConfirmPassword ? 'text' : 'password'"
                  formControlName="confirmPassword"
-                 [ngClass]="{'border-red-500/80 focus:border-red-500': isFieldInvalid('confirmPassword') || (registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched)}"
-                 class="w-full bg-[#0F172A] border border-slate-700 rounded-lg pl-4 pr-12 py-3 text-white focus:outline-none focus:border-[#6366F1] transition-all placeholder:text-slate-600 text-sm"
+                 [ngClass]="{'border-error/80 focus:border-error': isFieldInvalid('confirmPassword') || (registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched)}"
+                 class="w-full bg-bg border border-border rounded-lg pl-4 pr-12 py-3 text-text focus:outline-none focus:border-primary transition-all placeholder:text-text-secondary/50 text-sm"
                  placeholder="Répétez votre mot de passe">
           <button type="button"
                   (click)="showConfirmPassword = !showConfirmPassword"
-                  class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors bg-transparent border-0 cursor-pointer p-1"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-text transition-colors bg-transparent border-0 cursor-pointer p-1"
                   aria-label="Afficher/masquer la confirmation">
             <svg *ngIf="!showConfirmPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -135,11 +134,11 @@
           </button>
         </div>
         <span *ngIf="registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched"
-              class="text-red-400 text-xs mt-1 block">
+              class="text-error text-xs mt-1 block">
           Les mots de passe ne correspondent pas
         </span>
         <span *ngIf="isFieldInvalid('confirmPassword') && !registerForm.hasError('passwordMismatch')"
-              class="text-red-400 text-xs mt-1 block">
+              class="text-error text-xs mt-1 block">
           {{ getFieldError('confirmPassword') }}
         </span>
       </div>
@@ -147,13 +146,13 @@
       <!-- Submit Button -->
       <button type="submit"
               [disabled]="registerForm.invalid || isLoading"
-              class="w-full bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] hover:from-[#4F46E5] hover:to-[#7C3AED] disabled:opacity-50 disabled:cursor-not-allowed text-white py-3 rounded-lg font-semibold mt-2 shadow-lg shadow-indigo-500/10 transition-all duration-200 cursor-pointer border-0 flex items-center justify-center min-h-[48px]">
+              class="w-full bg-gradient-to-r from-primary to-accent hover:from-primary-hover hover:to-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-white py-3 rounded-lg font-semibold mt-2 shadow-lg shadow-primary/10 transition-all duration-200 cursor-pointer border-0 flex items-center justify-center min-h-[48px]">
         <span *ngIf="!isLoading">S'inscrire gratuitement →</span>
         <div *ngIf="isLoading" class="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
       </button>
 
       <!-- Trust Badges -->
-      <div class="flex justify-center flex-wrap gap-4 mt-2 text-xs text-slate-400">
+      <div class="flex justify-center flex-wrap gap-4 mt-2 text-xs text-text-secondary">
         <span>✓ Gratuit</span>
         <span>✓ Sans carte bancaire</span>
         <span>✓ IA locale</span>
@@ -162,12 +161,12 @@
 
     <!-- Divider -->
     <div class="relative flex py-4 items-center mt-4">
-      <div class="flex-grow border-t border-slate-700/50"></div>
+      <div class="flex-grow border-t border-border/50"></div>
     </div>
 
-    <p class="text-center text-slate-400 text-sm">
+    <p class="text-center text-text-secondary text-sm">
       Déjà un compte ?
-      <a routerLink="/login" class="text-[#6366F1] hover:text-indigo-400 font-medium transition-colors ml-1">
+      <a routerLink="/login" class="text-primary hover:text-primary-hover font-medium transition-colors ml-1">
         Se connecter
       </a>
     </p>
@@ -175,7 +174,7 @@
 
   <!-- Footer Links -->
   <div class="absolute bottom-6 left-0 w-full text-center">
-    <p class="text-slate-500 text-xs tracking-wide">
+    <p class="text-text-secondary text-xs tracking-wide">
       Confidentialité · Conditions · Support
     </p>
   </div>

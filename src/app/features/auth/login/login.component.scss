@@ -3,7 +3,40 @@
 }
 
 .auth-bg {
-  background-color: #0F172A;
-  background-image: radial-gradient(#334155 1px, transparent 1px);
+  background-color: var(--color-bg);
+  background-image: radial-gradient(var(--color-border) 1px, transparent 1px);
   background-size: 20px 20px;
+}
+::ng-deep .auth-input {
+  .dx-texteditor-input {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-size: 0.875rem;
+    padding: 0.75rem 1rem;
+  }
+  border-color: var(--color-border);
+  border-radius: 0.5rem;
+
+  &.dx-state-focused {
+    border-color: var(--color-primary);
+  }
+}
+
+::ng-deep .auth-input-error {
+  border-color: rgba(220, 38, 38, 0.8) !important;
+}
+
+::ng-deep .auth-checkbox {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+}
+
+::ng-deep .auth-submit-btn {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  border-radius: 0.5rem;
+  font-weight: 600;
+
+  &:hover:not(.dx-state-disabled) {
+    background: linear-gradient(135deg, var(--color-primary-hover), var(--color-accent-hover));
+  }
 }

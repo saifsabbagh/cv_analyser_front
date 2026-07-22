@@ -1,0 +1,92 @@
+<div class="page-container">
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Mes CVs</h1>
+      <p class="page-subtitle">{{ total() }} CV{{ total() !== 1 ? 's' : '' }} au total</p>
+    </div>
+    <a routerLink="/candidate/cv/upload" class="btn-primary">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
+      Analyser un CV
+    </a>
+  </div>
+
+  <!-- Loading skeleton -->
+  @if (loading()) {
+    <div class="cv-grid">
+      @for (_ of [1,2,3,4,5,6]; track _) {
+        <div class="skeleton-card">
+          <div class="skeleton-icon"></div>
+          <div class="skeleton-line w-75"></div>
+          <div class="skeleton-line w-50"></div>
+          <div class="skeleton-line w-60"></div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Error state -->
+  @if (error(); as err) {
+    <div class="error-banner">
+      <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>{{ err }}</span>
+    </div>
+  }
+
+  <!-- Empty state -->
+  @if (!loading() && total() === 0) {
+    <div class="empty-state">
+      <div class="empty-icon">
+        <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+      </div>
+      <h2 class="empty-title">Aucun CV pour le moment</h2>
+      <p class="empty-desc">Importez votre premier CV au format PDF pour commencer l'analyse.</p>
+      <a routerLink="/candidate/cv/upload" class="btn-primary">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        Analyser un CV
+      </a>
+    </div>
+  }
+
+  <!-- CV Grid -->
+  @if (!loading() && total() > 0) {
+    <div class="cv-grid">
+      @for (cv of cvs(); track cv.id) {
+        <app-cv-card [cv]="cv" (deleteRequested)="onDeleteRequested($event)" />
+      }
+    </div>
+  }
+
+  <!-- Pagination -->
+  @if (!loading() && totalPages() > 1) {
+    <div class="pagination">
+      <button
+        class="pagination-btn"
+        [disabled]="page() <= 1"
+        (click)="goToPage(page() - 1)"
+      >
+        Précédent
+      </button>
+
+      <div class="pagination-info">
+        Page {{ page() }} / {{ totalPages() }}
+      </div>
+
+      <button
+        class="pagination-btn"
+        [disabled]="page() >= totalPages()"
+        (click)="goToPage(page() + 1)"
+      >
+        Suivant
+      </button>
+    </div>
+  }
+</div>

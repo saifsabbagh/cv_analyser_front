@@ -1,0 +1,48 @@
+@if (loading()) {
+  <div class="chart-widget">
+    @if (title()) {
+      <h3 class="chart-widget-title">{{ title() }}</h3>
+    }
+    <div class="chart-skeleton">
+      <div class="skeleton-donut"></div>
+    </div>
+  </div>
+} @else if (!data() || data().length === 0) {
+  <div class="chart-widget">
+    @if (title()) {
+      <h3 class="chart-widget-title">{{ title() }}</h3>
+    }
+    <div class="chart-empty">
+      <svg class="chart-empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+      </svg>
+      <p>{{ emptyMessage() }}</p>
+    </div>
+  </div>
+} @else {
+  <div class="chart-widget">
+    @if (title()) {
+      <h3 class="chart-widget-title">{{ title() }}</h3>
+    }
+    <dx-pie-chart
+      [dataSource]="data()"
+      type="donut"
+      class="donut-chart-instance"
+      [resolveLabelOverlapping]="'shift'"
+    >
+      <dxi-series
+        [argumentField]="argumentField()"
+        [valueField]="valueField()"
+      />
+      <dxo-legend
+        [visible]="true"
+        verticalAlignment="bottom"
+        horizontalAlignment="center"
+        [columnCount]="2"
+      />
+      <dxo-tooltip [enabled]="true" />
+      <dxo-size [height]="280" />
+    </dx-pie-chart>
+  </div>
+}

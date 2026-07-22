@@ -1,0 +1,42 @@
+<a [routerLink]="['/candidate/cv', cv().id]" class="cv-card-link">
+  <article class="cv-card">
+    <div class="cv-card-header">
+      <div class="cv-card-icon">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+      </div>
+      <div class="cv-card-actions">
+        <button class="cv-card-menu-btn" (click)="toggleMenu($event)">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01" />
+          </svg>
+        </button>
+        @if (menuOpen) {
+          <div class="cv-card-menu">
+            <a [routerLink]="['/candidate/cv', cv().id]" class="cv-card-menu-item">
+              Voir détail
+            </a>
+            <button class="cv-card-menu-item text-error" (click)="onDelete()">
+              Supprimer
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="cv-card-body">
+      <h3 class="cv-card-filename" [title]="cv().filename">{{ cv().filename }}</h3>
+      <p class="cv-card-date">{{ formatDate(cv().createdAt) }}</p>
+    </div>
+
+    <div class="cv-card-footer">
+      <span class="cv-card-badge" [class]="getStatusBadgeClass(cv().status)">
+        {{ getStatusLabel(cv().status) }}
+      </span>
+      <span class="cv-card-skills-count">
+        {{ cv()._count.cvSkills }} compétence{{ cv()._count.cvSkills !== 1 ? 's' : '' }} détectée{{ cv()._count.cvSkills !== 1 ? 's' : '' }}
+      </span>
+    </div>
+  </article>
+</a>

@@ -61,11 +61,10 @@ export class ResetPasswordComponent implements OnInit {
 
   getStrengthColor(index: number): string {
     const score = this.getPasswordStrength();
-    if (index >= score) return 'bg-slate-700';
-    if (score <= 1) return 'bg-red-500';
-    if (score === 2) return 'bg-orange-500';
-    if (score === 3) return 'bg-yellow-500';
-    return 'bg-emerald-500';
+    if (index >= score) return 'bg-surface-alt';
+    if (score <= 1) return 'bg-error';
+    if (score === 2 || score === 3) return 'bg-warning';
+    return 'bg-success';
   }
 
   isFieldInvalid(fieldName: string): boolean {

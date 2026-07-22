@@ -1,0 +1,81 @@
+.chart-widget {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+
+  &-title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0 0 1rem;
+  }
+}
+
+.chart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1rem;
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  text-align: center;
+
+  &-icon {
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 0.75rem;
+    opacity: 0.4;
+  }
+}
+
+.chart-skeleton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+.skeleton-donut {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--color-surface-alt) 0% 40%,
+    color-mix(in srgb, var(--color-surface-alt) 60%, transparent) 40% 70%,
+    color-mix(in srgb, var(--color-surface-alt) 30%, transparent) 70% 100%
+  );
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+// DevExtreme overrides — donut segment colors
+:host ::ng-deep .donut-chart-instance {
+  // Score category coloring via CSS variables on SVG paths
+  .dxc-arcs path {
+    &:nth-child(1) {
+      fill: var(--color-success) !important;
+    }
+    &:nth-child(2) {
+      fill: var(--color-warning) !important;
+    }
+    &:nth-child(3) {
+      fill: var(--color-error) !important;
+    }
+  }
+
+  .dxc-legend text {
+    fill: var(--color-text) !important;
+    font-size: 12px;
+  }
+
+  .dxc-title text {
+    fill: var(--color-text) !important;
+    font-size: 14px;
+  }
+}

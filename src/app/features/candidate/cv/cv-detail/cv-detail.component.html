@@ -1,0 +1,161 @@
+<div class="page-container">
+  <!-- Back link -->
+  <a routerLink="/candidate/cv" class="back-link">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+    </svg>
+    Mes CVs
+  </a>
+
+  <!-- Loading state -->
+  @if (loading()) {
+    <div class="skeleton-block">
+      <div class="skeleton-line w-60"></div>
+      <div class="skeleton-line w-40"></div>
+      <div class="skeleton-line w-80"></div>
+    </div>
+  }
+
+  <!-- Error state -->
+  @if (error(); as err) {
+    <div class="error-banner">
+      <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>{{ err }}</span>
+    </div>
+  }
+
+  <!-- CV Detail -->
+  @if (!loading() && cv(); as cv) {
+    <!-- En-tête -->
+    <div class="cv-header">
+      <div class="cv-header-info">
+        <div class="cv-header-icon">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="cv-title">{{ cv.filename }}</h1>
+          <p class="cv-date">Ajouté le {{ formatDate(cv.createdAt) }}</p>
+        </div>
+      </div>
+      <span class="cv-badge" [class]="getStatusBadgeClass(cv.status)">
+        {{ getStatusLabel(cv.status) }}
+      </span>
+    </div>
+
+    <!-- Status messages -->
+    @if (cv.status === 'PENDING') {
+      <div class="status-card status-pending">
+        <span class="spinner"></span>
+        <div>
+          <strong>Analyse en cours...</strong>
+          <p>Les compétences de votre CV sont en cours d'extraction. Revenez dans quelques instants.</p>
+        </div>
+      </div>
+    }
+
+    @if (cv.status === 'FAILED') {
+      <div class="status-card status-failed">
+        <svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div>
+          <strong>Échec de l'analyse</strong>
+          <p>L'extraction des compétences n'a pas abouti. Vous pouvez réessayer avec un nouveau fichier.</p>
+          <a routerLink="/candidate/cv/upload" class="btn-link">Ré-uploader un CV</a>
+        </div>
+      </div>
+    }
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button
+        class="tab"
+        [class.tab-active]="activeTab() === 'skills'"
+        (click)="switchTab('skills')"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+        </svg>
+        Compétences extraites
+      </button>
+      <button
+        class="tab"
+        [class.tab-active]="activeTab() === 'pdf'"
+        (click)="switchTab('pdf')"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        Aperçu PDF
+      </button>
+    </div>
+
+    <!-- Tab content: Skills -->
+    @if (activeTab() === 'skills') {
+      <div class="tab-content">
+        @if (cv.status === 'EXTRACTED') {
+          @if (cv.skills.length > 0) {
+            <h2 class="section-title">Compétences détectées ({{ cv.skills.length }})</h2>
+            <div class="skills-grid">
+              @for (skill of cv.skills; track skill.id) {
+                <span class="skill-chip">{{ skill.name }}</span>
+              }
+            </div>
+          } @else {
+            <p class="text-secondary">Aucune compétence détectée dans ce CV.</p>
+          }
+        }
+
+        @if (cv.status === 'PENDING') {
+          <p class="text-secondary">Les compétences apparaîtront une fois l'analyse terminée.</p>
+        }
+
+        @if (cv.status === 'FAILED') {
+          <p class="text-secondary">L'extraction a échoué. Veuillez ré-uploader votre CV.</p>
+        }
+      </div>
+    }
+
+    <!-- Tab content: PDF -->
+    @if (activeTab() === 'pdf') {
+      <div class="tab-content">
+        @if (pdfLoading()) {
+          <div class="pdf-skeleton">
+            <span class="spinner"></span>
+            <span>Chargement du PDF...</span>
+          </div>
+        } @else if (pdfError(); as err) {
+          <p class="text-error">{{ err }}</p>
+        } @else if (pdfUrl()) {
+          <iframe
+            [src]="pdfUrl()"
+            class="pdf-viewer"
+            title="Aperçu du CV"
+          ></iframe>
+        }
+      </div>
+    }
+
+    <!-- Actions -->
+    <div class="actions">
+      @if (cv.status === 'EXTRACTED') {
+        <a routerLink="/candidate/jobs" class="btn-primary">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          Voir les offres correspondantes
+        </a>
+      }
+      <button class="btn-delete" (click)="onDelete()">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
+        Supprimer ce CV
+      </button>
+    </div>
+  }
+</div>

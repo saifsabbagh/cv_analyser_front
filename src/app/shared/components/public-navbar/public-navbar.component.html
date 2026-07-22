@@ -1,36 +1,37 @@
-<nav [ngClass]="{'bg-[#0F172A] border-b border-slate-800/80 shadow-lg': scrolled, 'bg-transparent': !scrolled}"
+<nav [ngClass]="{'bg-bg border-b border-border/80 shadow-lg': scrolled, 'bg-transparent': !scrolled}"
      class="fixed top-0 left-0 w-full z-50 transition-all duration-300">
   <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
     <!-- Logo -->
-    <a routerLink="/" class="text-xl font-bold text-[#6366F1] flex items-center gap-2 hover:opacity-95 transition-opacity">
+    <a routerLink="/" class="text-xl font-bold text-primary flex items-center gap-2 hover:opacity-95 transition-opacity">
       <span>CV Analyzer</span>
     </a>
 
     <!-- Desktop Navigation Links -->
     <div class="hidden lg:flex items-center gap-8">
-      <button (click)="scrollToSection('fonctionnalites')" class="text-sm text-[#94A3B8] hover:text-white transition-colors cursor-pointer bg-transparent border-0">
+      <button (click)="scrollToSection('fonctionnalites')" class="text-sm text-text-secondary hover:text-text transition-colors cursor-pointer bg-transparent border-0">
         Fonctionnalités
       </button>
-      <button (click)="scrollToSection('comment-ca-marche')" class="text-sm text-[#94A3B8] hover:text-white transition-colors cursor-pointer bg-transparent border-0">
+      <button (click)="scrollToSection('comment-ca-marche')" class="text-sm text-text-secondary hover:text-text transition-colors cursor-pointer bg-transparent border-0">
         Comment ça marche
       </button>
-      <a routerLink="/jobs" class="text-sm text-[#94A3B8] hover:text-white transition-colors">
+      <a routerLink="/jobs" class="text-sm text-text-secondary hover:text-text transition-colors">
         Offres
       </a>
     </div>
 
     <!-- Desktop CTA Buttons -->
     <div class="hidden lg:flex items-center gap-4">
-      <a routerLink="/login" class="text-sm text-white px-4 py-2 rounded-lg border border-slate-700 hover:border-[#6366F1] hover:bg-slate-800/50 transition-all">
+      <app-theme-toggle></app-theme-toggle>
+      <a routerLink="/login" class="text-sm text-text px-4 py-2 rounded-lg border border-border hover:border-primary hover:bg-surface-alt transition-all">
         Se connecter
       </a>
-      <a routerLink="/register" class="text-sm text-white px-4 py-2 rounded-lg bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] hover:from-[#4F46E5] hover:to-[#7C3AED] shadow-md shadow-[#6366F1]/10 transition-all">
+      <a routerLink="/register" class="text-sm text-white px-4 py-2 rounded-lg bg-gradient-to-r from-primary to-accent hover:from-primary-hover hover:to-accent-hover shadow-md shadow-primary/10 transition-all">
         S'inscrire
       </a>
     </div>
 
     <!-- Mobile Menu Toggle Button -->
-    <button (click)="toggleMenu()" class="lg:hidden text-[#94A3B8] hover:text-white transition-colors p-2 bg-transparent border-0 cursor-pointer" aria-label="Toggle menu">
+    <button (click)="toggleMenu()" class="lg:hidden text-text-secondary hover:text-text transition-colors p-2 bg-transparent border-0 cursor-pointer" aria-label="Toggle menu">
       <svg *ngIf="!menuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
       </svg>
@@ -41,25 +42,30 @@
   </div>
 
   <!-- Mobile Dropdown Menu -->
-  <div *ngIf="menuOpen" class="lg:hidden absolute top-[68px] left-0 w-full bg-[#1E293B] border-b border-slate-800 shadow-xl px-6 py-6 transition-all duration-300">
+  <div *ngIf="menuOpen" class="lg:hidden absolute top-[68px] left-0 w-full bg-surface border-b border-border shadow-xl px-6 py-6 transition-all duration-300">
     <div class="flex flex-col gap-5">
-      <button (click)="scrollToSection('fonctionnalites')" class="text-left text-sm text-[#94A3B8] hover:text-white transition-colors py-1 bg-transparent border-0 cursor-pointer">
+      <button (click)="scrollToSection('fonctionnalites')" class="text-left text-sm text-text-secondary hover:text-text transition-colors py-1 bg-transparent border-0 cursor-pointer">
         Fonctionnalités
       </button>
-      <button (click)="scrollToSection('comment-ca-marche')" class="text-left text-sm text-[#94A3B8] hover:text-white transition-colors py-1 bg-transparent border-0 cursor-pointer">
+      <button (click)="scrollToSection('comment-ca-marche')" class="text-left text-sm text-text-secondary hover:text-text transition-colors py-1 bg-transparent border-0 cursor-pointer">
         Comment ça marche
       </button>
-      <a routerLink="/jobs" (click)="menuOpen = false" class="text-sm text-[#94A3B8] hover:text-white transition-colors py-1">
+      <a routerLink="/jobs" (click)="menuOpen = false" class="text-sm text-text-secondary hover:text-text transition-colors py-1">
         Offres
       </a>
       
-      <div class="border-t border-slate-700/50 my-2"></div>
+      <div class="border-t border-border/50 my-2"></div>
       
       <div class="flex flex-col gap-3">
-        <a routerLink="/login" (click)="menuOpen = false" class="text-center text-sm text-white px-4 py-2.5 rounded-lg border border-slate-600 hover:border-[#6366F1] transition-all">
+        <div class="flex justify-between items-center px-1 py-1">
+          <span class="text-sm text-text-secondary">Thème</span>
+          <app-theme-toggle></app-theme-toggle>
+        </div>
+        <div class="border-t border-border/50 my-1"></div>
+        <a routerLink="/login" (click)="menuOpen = false" class="text-center text-sm text-text px-4 py-2.5 rounded-lg border border-border hover:border-primary transition-all">
           Se connecter
         </a>
-        <a routerLink="/register" (click)="menuOpen = false" class="text-center text-sm text-white px-4 py-2.5 rounded-lg bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] transition-all">
+        <a routerLink="/register" (click)="menuOpen = false" class="text-center text-sm text-white px-4 py-2.5 rounded-lg bg-gradient-to-r from-primary to-accent transition-all">
           S'inscrire
         </a>
       </div>

@@ -1,0 +1,110 @@
+.table-widget {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+
+  &-title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0 0 1rem;
+  }
+}
+
+.table-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  text-align: center;
+
+  &-icon {
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 0.75rem;
+    opacity: 0.4;
+  }
+}
+
+.table-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.skeleton-row {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem 0;
+}
+
+.skeleton-cell {
+  height: 1rem;
+  background-color: var(--color-surface-alt);
+  border-radius: 0.25rem;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+// DevExtreme overrides
+:host ::ng-deep .data-grid-instance {
+  &.dx-datagrid {
+    background-color: transparent !important;
+    border: none !important;
+    font-family: inherit;
+  }
+
+  .dx-datagrid-headers {
+    border-bottom: 1px solid var(--color-border) !important;
+
+    .dx-header-row {
+      background-color: transparent !important;
+
+      td {
+        color: var(--color-text-secondary) !important;
+        font-size: 0.8125rem !important;
+        font-weight: 600 !important;
+        padding: 0.625rem 0.5rem !important;
+        border-bottom: none !important;
+      }
+    }
+  }
+
+  .dx-datagrid-rowsview {
+    border: none !important;
+
+    .dx-row {
+      td {
+        color: var(--color-text) !important;
+        font-size: 0.8125rem !important;
+        padding: 0.625rem 0.5rem !important;
+        border-bottom: 1px solid var(--color-border) !important;
+        vertical-align: middle;
+      }
+    }
+
+    .dx-row-alt {
+      td {
+        background-color: var(--color-surface-alt) !important;
+      }
+    }
+
+    .dx-row:hover {
+      td {
+        background-color: color-mix(in srgb, var(--color-primary) 6%, transparent) !important;
+      }
+    }
+  }
+
+  .dx-datagrid-nowrap {
+    white-space: normal !important;
+  }
+}

@@ -1,10 +1,19 @@
 .hero {
-  background-color: #0F172A;
-  background-image: radial-gradient(#334155 1px, transparent 1px);
+  background-color: var(--color-bg);
+  background-image: radial-gradient(var(--color-border) 1px, transparent 1px);
   background-size: 20px 20px;
 }
 
 .mockup-card {
-  box-shadow: 0 0 40px rgba(99, 102, 241, 0.25);
   backdrop-filter: blur(10px);
+  box-shadow: 0 0 40px rgba(99, 102, 241, 0.25);
+  transition: box-shadow 0.3s ease;
+}
+
+[data-theme="dark"] .mockup-card {
+  box-shadow: 0 0 40px rgba(76, 111, 224, 0.15);
+}
+
+[data-theme="light"] .mockup-card {
+  box-shadow: 0 10px 30px rgba(27, 42, 74, 0.08);
 }

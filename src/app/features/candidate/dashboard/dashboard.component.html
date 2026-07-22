@@ -1,0 +1,58 @@
+<div class="space-y-6">
+  <!-- KPIs Row -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <app-kpi-card
+      icon="file-text"
+      label="Mes CVs"
+      [value]="totalCvs()"
+      [loading]="loading()"
+    />
+    <app-kpi-card
+      icon="trophy"
+      label="Meilleur Score"
+      [value]="bestScore() + '%'"
+      accentColor="success"
+      [loading]="loading()"
+    />
+    <app-kpi-card
+      icon="briefcase"
+      label="Offres Disponibles"
+      [value]="totalJobs()"
+      accentColor="info"
+      [loading]="loading()"
+    />
+    <app-kpi-card
+      icon="target"
+      label="Matchings Réalisés"
+      [value]="totalMatchings()"
+      accentColor="primary"
+      [loading]="loading()"
+    />
+  </div>
+
+  <!-- Charts Row -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <app-bar-chart-widget
+      title="Matchings par semaine"
+      [data]="weeklyMatchings()"
+      argumentField="semaine"
+      valueField="count"
+      [loading]="loading()"
+    />
+    <app-donut-chart-widget
+      title="Répartition des scores"
+      [data]="scoreDistribution()"
+      argumentField="categorie"
+      valueField="valeur"
+      [loading]="loading()"
+    />
+  </div>
+
+  <!-- Top 5 Table -->
+  <app-data-table-widget
+    title="Top 5 Matchings"
+    [data]="topMatchings()"
+    [columns]="topMatchingsColumns"
+    [loading]="loading()"
+  />
+</div>

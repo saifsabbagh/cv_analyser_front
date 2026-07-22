@@ -93,6 +93,8 @@ cv-front/
 ├── src/
 │   ├── environments/
 │   │   └── environment.ts          ← apiUrl: 'http://localhost:4000/api'
+│   ├── styles/
+│   │   └── _tokens.scss            ← design tokens (couleurs, dark/light)
 │   └── app/
 │       ├── app.routes.ts           ← routing global
 │       ├── app.config.ts           ← provideHttpClient, interceptors
@@ -101,7 +103,8 @@ cv-front/
 │       │   │   └── user.model.ts
 │       │   ├── services/
 │       │   │   ├── auth.service.ts
-│       │   │   └── token.service.ts
+│       │   │   ├── token.service.ts
+│       │   │   └── theme.service.ts
 │       │   ├── guards/
 │       │   │   ├── auth.guard.ts
 │       │   │   └── role.guard.ts
@@ -136,7 +139,8 @@ cv-front/
 │           └── components/
 │               ├── navbar/
 │               ├── sidebar/
-│               └── loader/
+│               ├── loader/
+│               └── theme-toggle/
 ├── CONTEXT.md
 └── AGENT_WORK_LOG.md
 ```
@@ -246,6 +250,43 @@ getUserRole(): 'CANDIDATE' | 'ADMIN' | null
 //    → si refresh échoue → authService.logout()
 ```
 
+### theme.service.ts
+```typescript
+import { Injectable, signal, effect } from '@angular/core';
+
+export type Theme = 'light' | 'dark';
+
+@Injectable({ providedIn: 'root' })
+export class ThemeService {
+  private readonly STORAGE_KEY = 'app-theme';
+  theme = signal<Theme>(this.getInitialTheme());
+
+  constructor() {
+    effect(() => {
+      const value = this.theme();
+      document.documentElement.setAttribute('data-theme', value);
+      localStorage.setItem(this.STORAGE_KEY, value);
+    });
+  }
+
+  private getInitialTheme(): Theme {
+    const saved = localStorage.getItem(this.STORAGE_KEY) as Theme | null;
+    if (saved === 'light' || saved === 'dark') return saved;
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return prefersDark ? 'dark' : 'light';
+  }
+
+  toggle() {
+    this.theme.set(this.theme() === 'dark' ? 'light' : 'dark');
+  }
+
+  setTheme(value: Theme) {
+    this.theme.set(value);
+  }
+}
+```
+Toggle UI : `src/app/shared/components/theme-toggle/theme-toggle.component.ts` (standalone, injecte ThemeService, bouton icône ☀️/🌙), placé dans navbar publique + sidebar candidate + sidebar admin.
+
 ### Modèle User
 ```typescript
 export interface User {
@@ -268,49 +309,80 @@ export interface AuthResponse {
 
 ## Design System
 
-### Thème par espace
-| Espace | Mode | Background | Sidebar | Cards |
-|--------|------|------------|---------|-------|
-| Pages publiques | Dark | #0F172A | — | #1E293B |
-| Auth (login/register) | Dark | #0F172A | — | #1E293B |
-| Candidate space | Dark | #0F172A | #1E293B | #1E293B |
-| Admin space | Light | #F8FAFC | #FFFFFF | #FFFFFF |
+### Thème (Dark/Light — toggle global, PLUS de thème fixe par espace)
+Le thème n'est plus lié à l'espace (public/auth/candidate/admin) mais à la préférence utilisateur, appliquée partout via `[data-theme]` sur `<html>`.
+- Par défaut : **dark** (ou préférence système `prefers-color-scheme` si détectée)
+- Persisté dans `localStorage` (clé `app-theme`)
+- Géré par `ThemeService` (voir Core Services ci-dessus)
+- Toggle visible dans navbar publique, sidebar candidate, sidebar admin
 
-### Couleurs
+### Design Tokens (SCSS variables + CSS custom properties)
+Fichier source : `src/styles/_tokens.scss`, importé dans `styles.scss` racine.
+**Toute couleur du projet DOIT passer par ces tokens.** Aucune valeur hex en dur dans un composant (ni `bg-[#xxxxxx]` Tailwind arbitrary, ni SCSS inline).
+
 ```scss
-// Dark mode
---bg-primary: #0F172A;
---bg-card: #1E293B;
---bg-hover: #334155;
---border: #334155;
---text-primary: #F8FAFC;
---text-secondary: #94A3B8;
+:root {
+  // Light mode
+  --color-bg: #F8FAFC;
+  --color-surface: #FFFFFF;
+  --color-surface-alt: #F1F5F9;
+  --color-primary: #1B2A4A;
+  --color-primary-hover: #24365F;
+  --color-accent: #2F9E5B;
+  --color-accent-hover: #278A4E;
+  --color-text: #0F172A;
+  --color-text-secondary: #475569;
+  --color-border: #E2E8F0;
+  --color-error: #DC2626;
+  --color-success: #16A34A;
+  --color-warning: #D97706;
+}
 
-// Brand colors (dark + light)
---color-indigo: #6366F1;
---color-indigo-hover: #4F46E5;
---color-indigo-light: rgba(99, 102, 241, 0.15);
---color-violet: #8B5CF6;
-
-// Semantic
---color-success: #10B981;   // emerald — score >= 70%
---color-warning: #F59E0B;   // amber   — score 40-69%
---color-danger: #EF4444;    // red     — score < 40%
-
-// Light mode (admin)
---bg-primary-light: #F8FAFC;
---bg-card-light: #FFFFFF;
---border-light: #E2E8F0;
---text-primary-light: #1E293B;
---text-secondary-light: #64748B;
+[data-theme="dark"] {
+  --color-bg: #0F172A;
+  --color-surface: #1E293B;
+  --color-surface-alt: #273449;
+  --color-primary: #4C6FE0;
+  --color-primary-hover: #3D5BC7;
+  --color-accent: #3AC17A;
+  --color-accent-hover: #2FA867;
+  --color-text: #F1F5F9;
+  --color-text-secondary: #94A3B8;
+  --color-border: #334155;
+  --color-error: #F87171;
+  --color-success: #4ADE80;
+  --color-warning: #FBBF24;
+}
 ```
+
+### Tailwind config — mapping des tokens
+`tailwind.config.js` référence les CSS variables, jamais de hex en dur :
+```javascript
+theme: {
+  extend: {
+    colors: {
+      bg: 'var(--color-bg)',
+      surface: 'var(--color-surface)',
+      'surface-alt': 'var(--color-surface-alt)',
+      primary: { DEFAULT: 'var(--color-primary)', hover: 'var(--color-primary-hover)' },
+      accent: { DEFAULT: 'var(--color-accent)', hover: 'var(--color-accent-hover)' },
+      text: { DEFAULT: 'var(--color-text)', secondary: 'var(--color-text-secondary)' },
+      border: 'var(--color-border)',
+      error: 'var(--color-error)',
+      success: 'var(--color-success)',
+      warning: 'var(--color-warning)',
+    }
+  }
+}
+```
+Usage dans les components : `bg-surface`, `text-text-secondary`, `border-border`, `bg-primary hover:bg-primary-hover`, etc. — jamais `bg-[#1E293B]`.
 
 ### Règle couleur des scores (GLOBALE, partout)
 ```typescript
 getScoreColor(score: number): string {
-  if (score >= 0.7) return '#10B981';  // vert
-  if (score >= 0.4) return '#F59E0B';  // orange
-  return '#EF4444';                     // rouge
+  if (score >= 0.7) return 'var(--color-success)';
+  if (score >= 0.4) return 'var(--color-warning)';
+  return 'var(--color-error)';
 }
 
 getScoreBadgeClass(score: number): string {
@@ -325,18 +397,18 @@ getScoreBadgeClass(score: number): string {
 - `@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap')`
 - body : font-family: 'Inter', sans-serif
 
-### Effets SCSS réutilisables
+### Effets SCSS réutilisables (basés sur tokens, pas de hex en dur)
 ```scss
-// Dot pattern background (pages dark)
+// Dot pattern background
 .dark-bg-pattern {
-  background-color: #0F172A;
-  background-image: radial-gradient(#334155 1px, transparent 1px);
+  background-color: var(--color-bg);
+  background-image: radial-gradient(var(--color-border) 1px, transparent 1px);
   background-size: 20px 20px;
 }
 
-// Glow indigo sur cards
+// Glow sur cards
 .card-glow {
-  box-shadow: 0 0 30px rgba(99, 102, 241, 0.15);
+  box-shadow: 0 0 30px color-mix(in srgb, var(--color-primary) 15%, transparent);
 }
 
 // Glow décoratif coin (pages auth)
@@ -346,44 +418,40 @@ getScoreBadgeClass(score: number): string {
   left: -200px;
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.15), transparent 70%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-primary) 15%, transparent), transparent 70%);
   pointer-events: none;
 }
 
 // Gradient bouton primary
 .btn-primary {
-  background: linear-gradient(135deg, #6366F1, #8B5CF6);
-  &:hover { background: linear-gradient(135deg, #4F46E5, #7C3AED); }
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  &:hover { background: linear-gradient(135deg, var(--color-primary-hover), var(--color-accent-hover)); }
 }
 ```
 
-### Composants DevExtreme — Configuration standard
-```typescript
-// dx-text-box
-stylingMode: 'outlined'
-// Override couleurs dans SCSS global pour dark mode :
-// .dx-texteditor.dx-editor-outlined { border-color: #334155; background: #0F172A; }
-// .dx-texteditor-input { color: #F8FAFC; }
+### RÈGLE — DevExtreme vs Custom (Tailwind/SCSS)
 
-// dx-button
-type: 'default' (primary indigo custom) | 'normal' (outlined) | 'danger'
-stylingMode: 'contained' | 'outlined' | 'text'
+**Utiliser DevExtreme UNIQUEMENT pour :**
+- `dx-data-grid` → tables complexes (Admin : users, jobs, skills, matches) avec sorting/filtering/pagination
+- `dx-chart` / `dx-pie-chart` / `dx-circular-gauge` → graphiques et score circle (matching results, admin dashboard)
+- `dx-tag-box` → multi-select (skills sur CV upload, création de job côté admin)
+- `dx-popup` → modals (confirmation delete, formulaires d'édition admin)
+- `dx-toast` → notifications succès/erreur
 
-// dx-data-grid (admin light mode)
-showBorders: false
-rowAlternationEnabled: true
-columnAutoWidth: true
-columnHidingEnabled: true  // responsive — cache colonnes sur mobile
+**Ne JAMAIS utiliser DevExtreme pour :**
+- Auth pages (login, register, forgot-password, reset-password) → 100% custom Tailwind/SCSS
+- Pages publiques (landing, jobs listing) → 100% custom Tailwind/SCSS
+- Inputs, boutons, checkboxes, labels standards → toujours custom, via les tokens (`bg-surface`, `border-border`, etc.)
+- Loading indicators simples → spinner CSS custom (sauf déjà dans un contexte dx-* comme un dx-data-grid, où `dx-load-indicator` natif est acceptable)
 
-// dx-popup
-width: '90%' (mobile) | '500px' (desktop)
-height: 'auto'
-showCloseButton: true
-
-// dx-toast
-displayTime: 3000
-position: { at: 'top right', my: 'top right', offset: '-20 20' }
+**Composants DevExtreme — doivent aussi respecter le thème actif** (override SCSS global lisant les CSS variables, jamais de valeurs fixes) :
+```scss
+.dx-texteditor.dx-editor-outlined { border-color: var(--color-border); background: var(--color-bg); }
+.dx-texteditor-input { color: var(--color-text); }
+.dx-datagrid { background-color: var(--color-surface); color: var(--color-text); }
 ```
+
+**Raison** : DevExtreme impose un override compliqué sur les inputs/boutons/cards custom, difficile à faire matcher pixel-perfect. Réservé aux composants complexes où il apporte une vraie valeur (grids, charts, gauges, tag-box, popup, toast).
 
 ---
 
@@ -529,4 +597,5 @@ isFieldInvalid(fieldName: string): boolean {
 - [ ] isLoading géré sur tous les appels API
 - [ ] Erreurs backend affichées à l'utilisateur
 - [ ] Route ajoutée dans app.routes.ts
+- [ ] Aucune couleur hex en dur — tout passe par les tokens (`bg-surface`, `text-text`, `var(--color-*)`)
 - [ ] AGENT_WORK_LOG.md mis à jour (🔲 → ✅)

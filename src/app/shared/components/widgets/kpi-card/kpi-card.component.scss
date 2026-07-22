@@ -1,0 +1,119 @@
+.kpi-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--color-primary) 8%, transparent);
+  }
+}
+
+.kpi-label {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  margin: 0 0 0.25rem;
+  font-weight: 500;
+}
+
+.kpi-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.kpi-variation {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+.variation-positive {
+  color: var(--color-success);
+}
+
+.variation-negative {
+  color: var(--color-error);
+}
+
+// Icon Circle
+.kpi-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  flex-shrink: 0;
+
+  &--primary {
+    background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+  }
+
+  &--success {
+    background-color: color-mix(in srgb, var(--color-success) 12%, transparent);
+    color: var(--color-success);
+  }
+
+  &--warning {
+    background-color: color-mix(in srgb, var(--color-warning) 12%, transparent);
+    color: var(--color-warning);
+  }
+
+  &--info {
+    background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+  }
+}
+
+// Skeleton
+.kpi-skeleton {
+  pointer-events: none;
+}
+
+.skeleton-circle {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  background-color: var(--color-surface-alt);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-line {
+  background-color: var(--color-surface-alt);
+  border-radius: 0.25rem;
+  animation: pulse 1.5s ease-in-out infinite;
+
+  &--sm {
+    width: 60%;
+    height: 0.75rem;
+  }
+
+  &--lg {
+    width: 40%;
+    height: 1.5rem;
+    margin-top: 0.25rem;
+  }
+
+  &--xs {
+    width: 30%;
+    height: 0.625rem;
+    margin-top: 0.375rem;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}

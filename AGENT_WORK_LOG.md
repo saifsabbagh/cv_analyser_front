@@ -76,18 +76,127 @@
 
 ---
 
-## 🔲 Module Candidate (Dark Mode)
-**Statut : À FAIRE**
+## ✅ Phase Candidate 1/6 — Layout Shell
+**Statut : TERMINÉ**
 
-### 8. Dashboard (/candidate/dashboard)
-### 9. Mes CVs (/candidate/cv)
-### 10. CV Detail (/candidate/cv/:id)
+### Shared Components
+- ✅ `src/app/shared/components/sidebar/sidebar.component.ts`
+- ✅ `src/app/shared/components/sidebar/sidebar.component.html`
+- ✅ `src/app/shared/components/sidebar/sidebar.component.scss`
+- ✅ `src/app/shared/components/topbar/topbar.component.ts`
+- ✅ `src/app/shared/components/topbar/topbar.component.html`
+- ✅ `src/app/shared/components/topbar/topbar.component.scss`
+
+### Candidate Layout
+- ✅ `src/app/features/candidate/layout/candidate-layout.component.ts`
+- ✅ `src/app/features/candidate/layout/candidate-layout.component.html`
+- ✅ `src/app/features/candidate/layout/candidate-layout.component.scss`
+
+### Routing
+- ✅ `src/app/app.routes.ts` — candidate route now uses lazy-loaded CandidateLayoutComponent
+
+---
+
+## ✅ Phase Candidate 2/6 — Dashboard + Widgets
+**Statut : TERMINÉ**
+
+### Core Models
+- ✅ `src/app/core/models/cv.model.ts`
+- ✅ `src/app/core/models/job.model.ts` — ajout `JobSkill` interface
+- ✅ `src/app/core/models/matching.model.ts`
+
+### Core Services
+- ✅ `src/app/core/services/cv.service.ts`
+- ✅ `src/app/core/services/job.service.ts` — ajout `getJobById()`, `getJobSkills()`
+- ✅ `src/app/core/services/matching.service.ts` — ajout `launchMatching()`
+
+### Shared Utilities
+- ✅ `src/app/shared/utils/date.utils.ts` — `groupByWeek()`, `categorizeScores()`
+
+### Shared Widgets (réutilisables admin)
+- ✅ `src/app/shared/components/widgets/kpi-card/kpi-card.component.ts` + .html + .scss
+- ✅ `src/app/shared/components/widgets/bar-chart-widget/bar-chart-widget.component.ts` + .html + .scss
+- ✅ `src/app/shared/components/widgets/donut-chart-widget/donut-chart-widget.component.ts` + .html + .scss
+- ✅ `src/app/shared/components/widgets/data-table-widget/data-table-widget.component.ts` + .html + .scss
+
+### Candidate Dashboard
+- ✅ `src/app/features/candidate/dashboard/dashboard.component.ts` + .html + .scss
+
+### Routing
+- ✅ `src/app/app.routes.ts` — dashboard lazy-loaded route enabled
+
+---
+
+## ✅ Phase Candidate 3/6 — Module CV (Liste + Upload + Détail + Aperçu PDF)
+**Statut : TERMINÉ**
+
+### Core Models
+- ✅ `src/app/core/models/cv.model.ts` — ajout interfaces `Skill`, `CVDetail`
+
+### Core Services
+- ✅ `src/app/core/services/cv.service.ts` — ajout `getById()`, `upload()`, `delete()`, `getFile()`
+
+### Shared Utilities
+- ✅ `src/app/shared/utils/cv.utils.ts` — `getStatusLabel()`, `getStatusBadgeClass()`, `getStatusColor()`
+
+### Components
+- ✅ `src/app/features/candidate/cv/components/cv-card/cv-card.component.ts` + .html + .scss
+
+### Pages
+- ✅ `src/app/features/candidate/cv/cv-list/cv-list.component.ts` + .html + .scss
+- ✅ `src/app/features/candidate/cv/cv-upload/cv-upload.component.ts` + .html + .scss
+- ✅ `src/app/features/candidate/cv/cv-detail/cv-detail.component.ts` + .html + .scss — avec onglets Compétences / Aperçu PDF
+
+### Backend — Nouvel endpoint PDF
+- ✅ `src/services/cv.service.js` — ajout `getCVFileById()`
+- ✅ `src/controllers/cv.controller.js` — ajout `getFile()`
+- ✅ `src/routes/cv.routes.js` — ajout route `GET /api/cv/:id/file`
+
+### Routing
+- ✅ `src/app/app.routes.ts` — routes `cv`, `cv/upload`, `cv/:id` ajoutées
+
+---
+
+## ✅ Phase Candidate 4/6 — Jobs (Liste + Détail + Matching)
+**Statut : TERMINÉ**
+
+### Core Models
+- ✅ `src/app/core/models/job.model.ts` — ajout interface `JobSkill`
+
+### Core Services
+- ✅ `src/app/core/services/job.service.ts` — ajout `getJobById()`, `getJobSkills()`
+- ✅ `src/app/core/services/matching.service.ts` — ajout `launchMatching()`
+
+### Components
+- ✅ `src/app/features/candidate/jobs/candidate-jobs.component.ts` + .html + .scss
+- ✅ `src/app/features/candidate/jobs/job-detail/candidate-job-detail.component.ts` + .html + .scss
+
+### Routing
+- ✅ `src/app/app.routes.ts` — routes `jobs`, `jobs/:id` ajoutées
+
+---
+
+## 🔲 Module Candidate (Suite)
+
 ### 11. Liste Offres Candidate (/candidate/jobs)
+
+✅ candidate-jobs.component.ts / .html / .scss
+
 ### 12. Offre Detail Candidate (/candidate/jobs/:id)
+
+✅ candidate-job-detail.component.ts / .html / .scss
+
 ### 13. Historique Matchings (/candidate/matchings)
+
+🔲 matchings.component.ts / .html / .scss
+
 ### 14. Matching Detail (/candidate/matchings/:id)
+
+🔲 matching-detail.component.ts / .html / .scss
+
 ### 15. Profil (/candidate/profile)
 
+🔲 profile.component.ts / .html / .scss
 ---
 
 ## 🔲 Module Admin (Light Mode)
@@ -107,5 +216,5 @@
 - DevExtreme pour tous les composants UI interactifs
 - Textes en français
 - Score >= 70% → vert, 40-69% → orange, < 40% → rouge
-- Candidate space → Dark mode
-- Admin space → Light mode
+- Thème dark/light → toggle global géré par ThemeService (localStorage + préférence système), s'applique à TOUS les espaces (public, auth, candidate, admin) — plus de thème fixe par espace
+- Toutes les couleurs passent par les design tokens (`src/styles/_tokens.scss` + mapping Tailwind) — aucune couleur hex en dur dans un composant

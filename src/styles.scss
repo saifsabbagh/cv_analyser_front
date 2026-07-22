@@ -1,40 +1,62 @@
 @use "tailwindcss";
+@use "./styles/tokens";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+// @import "./styles/tokens";
+
+@theme {
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-surface-alt: var(--color-surface-alt);
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-text: var(--color-text);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-border: var(--color-border);
+  --color-error: var(--color-error);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+}
 
 :root {
-  --bg-primary: #0F172A;
-  --bg-card: #1E293B;
-  --bg-hover: #334155;
-  --border: #334155;
-  --text-primary: #F8FAFC;
-  --text-secondary: #94A3B8;
-
-  --color-indigo: #6366F1;
-  --color-indigo-hover: #4F46E5;
-  --color-indigo-light: rgba(99, 102, 241, 0.15);
-  --color-violet: #8B5CF6;
-
-  --color-success: #10B981;
-  --color-warning: #F59E0B;
-  --color-danger: #EF4444;
+  // Backward compatibility with legacy styles
+  --bg-primary: var(--color-bg);
+  --bg-card: var(--color-surface);
+  --bg-hover: var(--color-surface-alt);
+  --border: var(--color-border);
+  --text-primary: var(--color-text);
+  --text-secondary: var(--color-text-secondary);
+  --color-indigo: var(--color-primary);
+  --color-indigo-hover: var(--color-primary-hover);
+  --color-violet: var(--color-accent);
 }
 
 body {
   font-family: 'Inter', sans-serif;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+  background-color: var(--color-bg);
+  color: var(--color-text);
   margin: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Custom design classes from CONTEXT.md */
+/* Custom design classes from CONTEXT.md updated to use tokens */
 .dark-bg-pattern {
-  background-color: #0F172A;
-  background-image: radial-gradient(#334155 1px, transparent 1px);
+  background-color: var(--color-bg);
+  background-image: radial-gradient(var(--color-border) 1px, transparent 1px);
   background-size: 20px 20px;
 }
 
 .card-glow {
   box-shadow: 0 0 30px rgba(99, 102, 241, 0.15);
+}
+
+[data-theme="dark"] .card-glow {
+  box-shadow: 0 0 30px rgba(76, 111, 224, 0.12);
+}
+
+[data-theme="light"] .card-glow {
+  box-shadow: 0 4px 20px rgba(27, 42, 74, 0.06);
 }
 
 .glow-decoration {
@@ -43,16 +65,22 @@ body {
   left: -200px;
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.15), transparent 70%);
+  background: radial-gradient(circle, var(--color-primary) 0%, transparent 70%);
   pointer-events: none;
+  opacity: 0.15;
+  transition: opacity 0.3s ease;
+}
+
+[data-theme="light"] .glow-decoration {
+  opacity: 0.05;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #6366F1, #8B5CF6);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
   color: #ffffff;
   transition: all 0.2s ease;
-  &:hover {
-    background: linear-gradient(135deg, #4F46E5, #7C3AED);
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--color-primary-hover), var(--color-accent-hover));
     transform: translateY(-1px);
   }
 }
