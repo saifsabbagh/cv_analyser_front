@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { MatchResult, MatchListResponse } from '../models/matching.model';
 
@@ -15,7 +15,7 @@ export class MatchingService {
       map(res => res.data as MatchListResponse),
       catchError(err => {
         const message = err.error?.message || 'Erreur lors du chargement des résultats';
-        throw new Error(message);
+        return throwError(() => new Error(message));
       })
     );
   }
@@ -25,7 +25,27 @@ export class MatchingService {
       map(res => res.data),
       catchError(err => {
         const message = err.error?.message || 'Erreur lors du lancement du matching';
-        throw new Error(message);
+        return throwError(() => new Error(message));
+      })
+    );
+  }
+
+  getById(id: number): Observable<MatchResult> {
+    return this.http.get<any>(`${this.BASE_URL}/match/${id}`).pipe(
+      map(res => res.data as MatchResult),
+      catchError(err => {
+        const message = err.error?.message || 'Erreur lors du chargement du détail';
+        return throwError(() => new Error(message));
+      })
+    );
+  }
+
+  deleteMatching(id: number): Observable<void> {
+    return this.http.delete<any>(`${this.BASE_URL}/match/${id}`).pipe(
+      map(() => undefined),
+      catchError(err => {
+        const message = err.error?.message || 'Erreur lors de la suppression';
+        return throwError(() => new Error(message));
       })
     );
   }

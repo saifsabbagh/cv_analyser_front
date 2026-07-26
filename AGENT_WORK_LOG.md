@@ -188,15 +188,24 @@
 
 ### 13. Historique Matchings (/candidate/matchings)
 
-🔲 matchings.component.ts / .html / .scss
+✅ `src/app/features/candidate/matchings/matchings.component.ts`
+✅ `src/app/features/candidate/matchings/matchings.component.html`
+✅ `src/app/features/candidate/matchings/matchings.component.scss`
 
 ### 14. Matching Detail (/candidate/matchings/:id)
 
-🔲 matching-detail.component.ts / .html / .scss
+✅ `src/app/features/candidate/matchings/matching-detail/matching-detail.component.ts`
+✅ `src/app/features/candidate/matchings/matching-detail/matching-detail.component.html`
+✅ `src/app/features/candidate/matchings/matching-detail/matching-detail.component.scss`
 
 ### 15. Profil (/candidate/profile)
 
 🔲 profile.component.ts / .html / .scss
+
+### Companion Changes (Phase 5)
+- ✅ `src/app/core/services/matching.service.ts` — ajout `getById()`, `deleteMatching()`
+- ✅ `src/app/app.routes.ts` — routes `matchings`, `matchings/:id` ajoutées
+- ✅ `src/styles.scss` — ajout classes `.badge-success`, `.badge-warning`, `.badge-danger`
 ---
 
 ## 🔲 Module Admin (Light Mode)

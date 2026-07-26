@@ -1,0 +1,11 @@
+:host {
+  display: block;
+}
+
+dx-circular-gauge {
+  ::ng-deep {
+    .dxg-title text {
+      fill: var(--color-text);
+    }
+  }
+}

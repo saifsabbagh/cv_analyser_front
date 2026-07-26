@@ -24,6 +24,8 @@ export const routes: Routes = [
       { path: 'cv/:id', loadComponent: () => import('./features/candidate/cv/cv-detail/cv-detail.component').then(m => m.CvDetailComponent) },
       { path: 'jobs', loadComponent: () => import('./features/candidate/jobs/candidate-jobs.component').then(m => m.CandidateJobsComponent) },
       { path: 'jobs/:id', loadComponent: () => import('./features/candidate/jobs/job-detail/candidate-job-detail.component').then(m => m.CandidateJobDetailComponent) },
+      { path: 'matchings', loadComponent: () => import('./features/candidate/matchings/matchings.component').then(m => m.MatchingsComponent) },
+      { path: 'matchings/:id', loadComponent: () => import('./features/candidate/matchings/matching-detail/matching-detail.component').then(m => m.MatchingDetailComponent) },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
