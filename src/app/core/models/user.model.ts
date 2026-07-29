@@ -5,6 +5,7 @@ export interface User {
   role: 'CANDIDATE' | 'ADMIN';
   isActive: boolean;
   createdAt: string;
+  avatarUrl?: string | null;
 }
 
 export interface AuthResponse {

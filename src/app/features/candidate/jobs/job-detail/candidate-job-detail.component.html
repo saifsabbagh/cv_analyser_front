@@ -1,11 +1,14 @@
 <div class="p-4 sm:p-6 lg:p-8 max-w-3xl">
   <!-- Back link -->
-  <a routerLink="/candidate/jobs" class="inline-flex items-center text-text-secondary hover:text-text transition-colors mb-6 text-sm">
+  <a
+    routerLink="/candidate/jobs"
+    class="inline-flex items-center text-text-secondary hover:text-text transition-colors mb-6 text-sm"
+  >
     ← Retour aux offres
   </a>
 
   <!-- Loading -->
-  @if (isLoading) {
+  @if (isLoading()) {
     <div class="animate-pulse space-y-4">
       <div class="h-8 bg-surface-alt rounded w-3/4"></div>
       <div class="h-4 bg-surface-alt rounded w-1/3"></div>
@@ -17,32 +20,35 @@
   }
 
   <!-- Error -->
-  @if (errorMessage && !isLoading) {
+  @if (errorMessage() && !isLoading()) {
     <div class="text-center py-12">
-      <p class="text-error">{{ errorMessage }}</p>
-      <a routerLink="/candidate/jobs" class="text-primary hover:text-primary-hover mt-4 inline-block">
+      <p class="text-error">{{ errorMessage() }}</p>
+      <a
+        routerLink="/candidate/jobs"
+        class="text-primary hover:text-primary-hover mt-4 inline-block"
+      >
         ← Retour aux offres
       </a>
     </div>
   }
 
   <!-- Job detail -->
-  @if (job && !isLoading) {
-    <h1 class="text-2xl font-bold text-text mb-1">{{ job.title }}</h1>
-    @if (job.location) {
-      <p class="text-text-secondary mb-6">{{ job.location }}</p>
+  @if (job() && !isLoading()) {
+    <h1 class="text-2xl font-bold text-text mb-1">{{ job()?.title }}</h1>
+    @if (job()?.location) {
+      <p class="text-text-secondary mb-6">{{ job()?.location }}</p>
     }
 
     <div class="text-text whitespace-pre-line leading-relaxed mb-8">
-      {{ job.description }}
+      {{ job()?.description }}
     </div>
 
     <!-- Skills -->
-    @if (skills.length > 0) {
+    @if (skills().length > 0) {
       <section class="mb-8">
         <h2 class="text-lg font-semibold text-text mb-3">Compétences requises</h2>
         <div class="flex flex-wrap gap-2">
-          @for (skill of skills; track skill.id) {
+          @for (skill of skills(); track skill.id) {
             <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">
               {{ skill.name }}
             </span>
@@ -62,76 +68,147 @@
 
   <!-- CV Selection Popup -->
   <dx-popup
-    [visible]="isMatchPopupVisible"
+    [visible]="isMatchPopupVisible()"
     [width]="popupWidth"
     [showTitle]="true"
     title="Choisir un CV"
     [showCloseButton]="true"
-    (onHiding)="isMatchPopupVisible = false"
+    (onHiding)="isMatchPopupVisible.set(false)"
   >
     <div *dxTemplate="let data of 'content'">
-      @if (matchError) {
-        <div class="bg-error/10 text-error text-sm p-3 rounded-lg mb-4">{{ matchError }}</div>
+      @if (matchError()) {
+        <div class="bg-error/10 text-error text-sm p-3 rounded-lg mb-4">{{ matchError() }}</div>
       }
 
-      @if (myCvs.length === 0) {
+      <!-- Polling : analyse en cours -->
+      @if (pollingStatus() === 'PENDING') {
+        <div class="text-center py-8">
+          <div
+            class="inline-block w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin mb-4"
+          ></div>
+          <p class="text-text font-medium mb-1">Analyse du CV en cours...</p>
+          <p class="text-text-secondary text-sm">
+            Le matching se lancera automatiquement une fois terminé.
+          </p>
+        </div>
+      }
+
+      <!-- Matching en cours (EXTRACTED puis auto-matching) -->
+      @if (pollingStatus() === 'EXTRACTED' && isMatchLoading()) {
+        <div class="text-center py-8">
+          <div
+            class="inline-block w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin mb-4"
+          ></div>
+          <p class="text-text font-medium">Calcul du matching en cours...</p>
+        </div>
+      }
+
+      <!-- Échec analyse -->
+      @if (pollingStatus() === 'FAILED') {
         <div class="text-center py-6">
-          <p class="text-text-secondary mb-4">Vous n'avez aucun CV analysé disponible.</p>
-          <a routerLink="/candidate/cv" class="text-primary hover:text-primary-hover font-medium">
-            Uploader un CV →
-          </a>
-        </div>
-      }
-
-      @if (myCvs.length > 0) {
-        <div class="space-y-2 max-h-80 overflow-y-auto">
-          @for (cv of myCvs; track cv.id) {
-            <div
-              (click)="selectCv(cv.id)"
-              class="flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors"
-              [class.border-primary]="selectedCvId === cv.id"
-              [class.bg-primary/5]="selectedCvId === cv.id"
-              [class.border-border]="selectedCvId !== cv.id"
-              [class.hover:border-primary]="selectedCvId !== cv.id"
-            >
-              <div
-                class="w-4 h-4 rounded-full border-2 flex-shrink-0 transition-colors"
-                [class.border-primary]="selectedCvId === cv.id"
-                [class.border-text-secondary]="selectedCvId !== cv.id"
-              >
-                @if (selectedCvId === cv.id) {
-                  <div class="w-2 h-2 rounded-full bg-primary m-0.5"></div>
-                }
-              </div>
-              <div class="flex-1 min-w-0">
-                <p class="text-text font-medium truncate">{{ cv.filename }}</p>
-                <p class="text-text-secondary text-xs">{{ cv.createdAt | date: 'dd/MM/yyyy' }}</p>
-              </div>
-            </div>
-          }
-        </div>
-
-        <div class="mt-6 flex justify-end">
+          <p class="text-error text-sm mb-3">L'analyse de ce CV a échoué.</p>
           <button
-            (click)="confirmMatch()"
-            [disabled]="!selectedCvId || isMatchLoading"
-            class="px-6 py-2.5 rounded-xl font-medium transition-colors flex items-center gap-2"
-            [class.bg-primary]="selectedCvId"
-            [class.text-white]="selectedCvId"
-            [class.bg-surface-alt]="!selectedCvId"
-            [class.text-text-secondary]="!selectedCvId"
-            [class.cursor-not-allowed]="!selectedCvId"
-            [class.hover:bg-primary-hover]="selectedCvId && !isMatchLoading"
+            (click)="pollingStatus.set(null); uploadMode.set(true)"
+            class="text-primary text-sm font-medium"
           >
-            @if (isMatchLoading) {
-              <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-              </svg>
-            }
-            Confirmer
+            Réessayer avec un autre fichier
           </button>
         </div>
+      }
+
+      <!-- État normal : liste + upload (hors polling) -->
+      @if (!pollingStatus()) {
+        @if (!uploadMode() && myCvs().length > 0) {
+          <div class="space-y-2 max-h-64 overflow-y-auto mb-4">
+            @for (cv of myCvs(); track cv.id) {
+              <div
+                (click)="selectCv(cv.id)"
+                class="flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors"
+                [class.border-primary]="selectedCvId() === cv.id"
+                [class.border-border]="selectedCvId() !== cv.id"
+              >
+                <div
+                  class="w-4 h-4 rounded-full border-2 flex-shrink-0"
+                  [class.border-primary]="selectedCvId() === cv.id"
+                  [class.border-text-secondary]="selectedCvId() !== cv.id"
+                >
+                  @if (selectedCvId() === cv.id) {
+                    <div class="w-2 h-2 rounded-full bg-primary m-0.5"></div>
+                  }
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-text font-medium truncate">{{ cv.filename }}</p>
+                  <p class="text-text-secondary text-xs">{{ cv.createdAt | date: 'dd/MM/yyyy' }}</p>
+                </div>
+              </div>
+            }
+          </div>
+        }
+
+        @if (!uploadMode() && myCvs().length === 0) {
+          <div class="text-center py-4 mb-2">
+            <p class="text-text-secondary text-sm">Vous n'avez aucun CV analysé disponible.</p>
+          </div>
+        }
+
+        @if (!uploadMode()) {
+          <button
+            (click)="toggleUploadMode()"
+            class="w-full text-center py-2.5 rounded-lg border border-dashed border-border text-primary hover:border-primary transition-colors text-sm font-medium mb-4"
+          >
+            + Uploader un nouveau CV
+          </button>
+        }
+
+        @if (uploadMode()) {
+          <div class="border border-border rounded-lg p-4 mb-4">
+            <input
+              type="file"
+              accept="application/pdf"
+              (change)="onFileSelected($event)"
+              class="text-sm text-text-secondary mb-3 w-full"
+            />
+            @if (uploadError()) {
+              <p class="text-error text-xs mb-2">{{ uploadError() }}</p>
+            }
+            <div class="flex gap-2">
+              <button
+                (click)="uploadNewCv()"
+                [disabled]="!selectedFile() || isUploading()"
+                class="flex-1 bg-primary hover:bg-primary-hover text-white py-2 rounded-lg text-sm font-medium disabled:opacity-50"
+              >
+                @if (isUploading()) {
+                  Envoi en cours...
+                } @else {
+                  Envoyer le CV
+                }
+              </button>
+              <button
+                (click)="toggleUploadMode()"
+                class="px-4 py-2 rounded-lg border border-border text-text-secondary text-sm"
+              >
+                Annuler
+              </button>
+            </div>
+          </div>
+        }
+
+        @if (selectedCvId() && !uploadMode()) {
+          <div class="flex justify-end mt-4">
+            <button
+              (click)="confirmMatch()"
+              [disabled]="isMatchLoading()"
+              class="px-6 py-2.5 rounded-xl font-medium bg-primary hover:bg-primary-hover text-white transition-colors flex items-center gap-2"
+            >
+              @if (isMatchLoading()) {
+                <span
+                  class="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"
+                ></span>
+              }
+              Confirmer
+            </button>
+          </div>
+        }
       }
     </div>
   </dx-popup>

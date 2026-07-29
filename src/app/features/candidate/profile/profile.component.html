@@ -1,0 +1,133 @@
+<div class="p-4 sm:p-6 lg:p-8">
+  <!-- Header -->
+  <h1 class="text-2xl font-bold text-text mb-6">Mon profil</h1>
+
+  <!-- Loading skeleton -->
+  @if (isLoading()) {
+    <div class="max-w-2xl">
+      <div class="bg-surface border border-border rounded-xl p-6 md:p-8 animate-pulse">
+        <div class="flex items-center gap-4 mb-8">
+          <div class="w-20 h-20 rounded-full bg-surface-alt"></div>
+          <div class="flex-1">
+            <div class="h-6 bg-surface-alt rounded w-48 mb-2"></div>
+            <div class="h-4 bg-surface-alt rounded w-24"></div>
+          </div>
+        </div>
+        <div class="space-y-4">
+          @for (item of [1,2,3]; track item) {
+            <div class="border-t border-border pt-4">
+              <div class="h-4 bg-surface-alt rounded w-1/3 mb-1"></div>
+              <div class="h-5 bg-surface-alt rounded w-2/3"></div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Error state -->
+  @if (errorMessage() && !isLoading()) {
+    <div class="text-center py-12">
+      <p class="text-error">{{ errorMessage() }}</p>
+    </div>
+  }
+
+  <!-- Profile content -->
+  @if (user(); as u) {
+    <div class="max-w-2xl">
+      <!-- Main profile card -->
+      <div class="bg-surface border border-border rounded-xl p-6 md:p-8">
+        <!-- Avatar + Name + Role -->
+        <div class="flex items-center gap-4 mb-8">
+          <div class="relative w-20 h-20 group cursor-pointer shrink-0" (click)="fileInput.click()">
+            @if (avatarPreviewUrl() || user()?.avatarUrl) {
+              <img
+                [src]="avatarPreviewUrl() || user()?.avatarUrl"
+                class="w-20 h-20 rounded-full object-cover border-2 border-border"
+                alt="Photo de profil"
+              />
+            } @else {
+              <div class="w-20 h-20 rounded-full bg-primary/10 text-primary flex items-center justify-center text-2xl font-bold">
+                {{ getInitials() }}
+              </div>
+            }
+            <div class="absolute inset-0 rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <span class="text-white text-xs">📷 Changer</span>
+            </div>
+          </div>
+          <input #fileInput type="file" accept="image/jpeg,image/png,image/webp" class="hidden" (change)="onAvatarFileSelected($event)" />
+
+          @if (saveError()) {
+            <p class="text-error text-xs mt-2">{{ saveError() }}</p>
+          }
+          @if (selectedAvatarFile()) {
+            <button (click)="saveProfile()" [disabled]="isSaving()" class="text-primary text-sm mt-2 font-medium">
+              @if (isSaving()) { Envoi en cours... } @else { ✓ Confirmer la nouvelle photo }
+            </button>
+          }
+          <div>
+            @if (!isEditingName()) {
+              <div class="flex items-center gap-2">
+                <h2 class="text-xl font-bold text-text">{{ user()?.name }}</h2>
+                <button (click)="startEditName()" class="text-text-secondary hover:text-primary text-sm" title="Modifier le nom">✏️</button>
+              </div>
+            } @else {
+              <div class="flex items-center gap-2">
+                <input
+                  [value]="nameInput()"
+                  (input)="nameInput.set($any($event.target).value)"
+                  class="bg-bg border border-border rounded-lg px-3 py-1.5 text-text text-lg font-bold focus:outline-none focus:border-primary"
+                />
+                <button (click)="saveProfile()" [disabled]="isSaving()" class="text-success text-sm font-medium">✓</button>
+                <button (click)="cancelEditName()" class="text-text-secondary text-sm">✕</button>
+              </div>
+            }
+            <span class="inline-block bg-primary/10 text-primary rounded-full px-3 py-1 text-sm font-medium mt-1">
+              {{ getRoleLabel() }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Info lines -->
+        <div class="border-t border-border">
+          <div class="flex justify-between py-3">
+            <span class="text-text-secondary">Email</span>
+            <span class="text-text font-medium text-right">{{ u.email }}</span>
+          </div>
+        </div>
+        <div class="border-t border-border">
+          <div class="flex justify-between py-3">
+            <span class="text-text-secondary">Membre depuis</span>
+            <span class="text-text font-medium text-right">{{ u.createdAt | date:'dd MMMM yyyy' }}</span>
+          </div>
+        </div>
+        <div class="border-t border-border">
+          <div class="flex justify-between py-3">
+            <span class="text-text-secondary">Statut du compte</span>
+            @if (u.isActive) {
+              <span class="inline-flex items-center gap-1 text-sm font-medium text-success">
+                <span class="w-2 h-2 rounded-full bg-success"></span>
+                Actif
+              </span>
+            } @else {
+              <span class="inline-flex items-center gap-1 text-sm font-medium text-error">
+                <span class="w-2 h-2 rounded-full bg-error"></span>
+                Désactivé
+              </span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Logout section -->
+      <div class="bg-surface border border-border rounded-xl p-6 mt-6">
+        <button
+          (click)="onLogout()"
+          class="w-full sm:w-auto px-6 py-3 rounded-xl bg-error/10 text-error hover:bg-error/20 font-medium transition-colors"
+        >
+          Se déconnecter
+        </button>
+      </div>
+    </div>
+  }
+</div>

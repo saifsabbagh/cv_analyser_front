@@ -1,10 +1,13 @@
 # CV Analyzer Frontend — Agent Work Log
+
 > Suivi de tous les fichiers créés/modifiés, module par module.
 
 ---
 
 ## ✅ Setup Initial
+
 **Statut : TERMINÉ**
+
 - Angular 17+ standalone créé (ng new cv-front)
 - Tailwind CSS configuré
 - SCSS activé
@@ -15,8 +18,11 @@
 ---
 
 ## ✅ Core Services & Guards
+
 **Statut : TERMINÉ**
+
 ### Fichiers à créer
+
 - ✅ `src/app/core/models/user.model.ts`
 - ✅ `src/app/core/services/token.service.ts`
 - ✅ `src/app/core/services/auth.service.ts`
@@ -27,24 +33,29 @@
 ---
 
 ## ✅ Pages Publiques
+
 **Statut : TERMINÉ**
 
 ### 0. Shared Public Navbar
+
 - ✅ `src/app/shared/components/public-navbar/public-navbar.component.ts`
 - ✅ `src/app/shared/components/public-navbar/public-navbar.component.html`
 - ✅ `src/app/shared/components/public-navbar/public-navbar.component.scss`
 
 ### 1. Landing Page (/)
+
 - ✅ `src/app/features/public/landing/landing.component.ts`
 - ✅ `src/app/features/public/landing/landing.component.html`
 - ✅ `src/app/features/public/landing/landing.component.scss`
 
 ### 2. Public Jobs (/jobs)
+
 - ✅ `src/app/features/public/jobs/public-jobs.component.ts`
 - ✅ `src/app/features/public/jobs/public-jobs.component.html`
 - ✅ `src/app/features/public/jobs/public-jobs.component.scss`
 
 ### 3. Public Job Detail (/jobs/:id)
+
 - ✅ `src/app/features/public/job-detail/public-job-detail.component.ts`
 - ✅ `src/app/features/public/job-detail/public-job-detail.component.html`
 - ✅ `src/app/features/public/job-detail/public-job-detail.component.scss`
@@ -52,24 +63,29 @@
 ---
 
 ## ✅ Module Auth
+
 **Statut : TERMINÉ**
 
 ### 4. Login (/login)
+
 - ✅ `src/app/features/auth/login/login.component.ts`
 - ✅ `src/app/features/auth/login/login.component.html`
 - ✅ `src/app/features/auth/login/login.component.scss`
 
 ### 5. Register (/register)
+
 - ✅ `src/app/features/auth/register/register.component.ts`
 - ✅ `src/app/features/auth/register/register.component.html`
 - ✅ `src/app/features/auth/register/register.component.scss`
 
 ### 6. Forgot Password (/forgot-password)
+
 - ✅ `src/app/features/auth/forgot-password/forgot-password.component.ts`
 - ✅ `src/app/features/auth/forgot-password/forgot-password.component.html`
 - ✅ `src/app/features/auth/forgot-password/forgot-password.component.scss`
 
 ### 7. Reset Password (/reset-password)
+
 - ✅ `src/app/features/auth/reset-password/reset-password.component.ts`
 - ✅ `src/app/features/auth/reset-password/reset-password.component.html`
 - ✅ `src/app/features/auth/reset-password/reset-password.component.scss`
@@ -77,9 +93,11 @@
 ---
 
 ## ✅ Phase Candidate 1/6 — Layout Shell
+
 **Statut : TERMINÉ**
 
 ### Shared Components
+
 - ✅ `src/app/shared/components/sidebar/sidebar.component.ts`
 - ✅ `src/app/shared/components/sidebar/sidebar.component.html`
 - ✅ `src/app/shared/components/sidebar/sidebar.component.scss`
@@ -88,95 +106,119 @@
 - ✅ `src/app/shared/components/topbar/topbar.component.scss`
 
 ### Candidate Layout
+
 - ✅ `src/app/features/candidate/layout/candidate-layout.component.ts`
 - ✅ `src/app/features/candidate/layout/candidate-layout.component.html`
 - ✅ `src/app/features/candidate/layout/candidate-layout.component.scss`
 
 ### Routing
+
 - ✅ `src/app/app.routes.ts` — candidate route now uses lazy-loaded CandidateLayoutComponent
 
 ---
 
 ## ✅ Phase Candidate 2/6 — Dashboard + Widgets
+
 **Statut : TERMINÉ**
 
 ### Core Models
+
 - ✅ `src/app/core/models/cv.model.ts`
 - ✅ `src/app/core/models/job.model.ts` — ajout `JobSkill` interface
 - ✅ `src/app/core/models/matching.model.ts`
 
 ### Core Services
+
 - ✅ `src/app/core/services/cv.service.ts`
 - ✅ `src/app/core/services/job.service.ts` — ajout `getJobById()`, `getJobSkills()`
 - ✅ `src/app/core/services/matching.service.ts` — ajout `launchMatching()`
 
 ### Shared Utilities
+
 - ✅ `src/app/shared/utils/date.utils.ts` — `groupByWeek()`, `categorizeScores()`
 
 ### Shared Widgets (réutilisables admin)
+
 - ✅ `src/app/shared/components/widgets/kpi-card/kpi-card.component.ts` + .html + .scss
 - ✅ `src/app/shared/components/widgets/bar-chart-widget/bar-chart-widget.component.ts` + .html + .scss
 - ✅ `src/app/shared/components/widgets/donut-chart-widget/donut-chart-widget.component.ts` + .html + .scss
 - ✅ `src/app/shared/components/widgets/data-table-widget/data-table-widget.component.ts` + .html + .scss
 
 ### Candidate Dashboard
+
 - ✅ `src/app/features/candidate/dashboard/dashboard.component.ts` + .html + .scss
 
 ### Routing
+
 - ✅ `src/app/app.routes.ts` — dashboard lazy-loaded route enabled
 
 ---
 
 ## ✅ Phase Candidate 3/6 — Module CV (Liste + Upload + Détail + Aperçu PDF)
+
 **Statut : TERMINÉ**
 
 ### Core Models
+
 - ✅ `src/app/core/models/cv.model.ts` — ajout interfaces `Skill`, `CVDetail`
 
 ### Core Services
+
 - ✅ `src/app/core/services/cv.service.ts` — ajout `getById()`, `upload()`, `delete()`, `getFile()`
 
 ### Shared Utilities
+
 - ✅ `src/app/shared/utils/cv.utils.ts` — `getStatusLabel()`, `getStatusBadgeClass()`, `getStatusColor()`
 
 ### Components
+
 - ✅ `src/app/features/candidate/cv/components/cv-card/cv-card.component.ts` + .html + .scss
 
 ### Pages
+
 - ✅ `src/app/features/candidate/cv/cv-list/cv-list.component.ts` + .html + .scss
 - ✅ `src/app/features/candidate/cv/cv-upload/cv-upload.component.ts` + .html + .scss
 - ✅ `src/app/features/candidate/cv/cv-detail/cv-detail.component.ts` + .html + .scss — avec onglets Compétences / Aperçu PDF
 
 ### Backend — Nouvel endpoint PDF
+
 - ✅ `src/services/cv.service.js` — ajout `getCVFileById()`
 - ✅ `src/controllers/cv.controller.js` — ajout `getFile()`
 - ✅ `src/routes/cv.routes.js` — ajout route `GET /api/cv/:id/file`
 
 ### Routing
+
 - ✅ `src/app/app.routes.ts` — routes `cv`, `cv/upload`, `cv/:id` ajoutées
 
 ---
 
 ## ✅ Phase Candidate 4/6 — Jobs (Liste + Détail + Matching)
+
 **Statut : TERMINÉ**
 
 ### Core Models
+
 - ✅ `src/app/core/models/job.model.ts` — ajout interface `JobSkill`
 
 ### Core Services
+
 - ✅ `src/app/core/services/job.service.ts` — ajout `getJobById()`, `getJobSkills()`
 - ✅ `src/app/core/services/matching.service.ts` — ajout `launchMatching()`
 
 ### Components
+
 - ✅ `src/app/features/candidate/jobs/candidate-jobs.component.ts` + .html + .scss
 - ✅ `src/app/features/candidate/jobs/job-detail/candidate-job-detail.component.ts` + .html + .scss
 
 ### Routing
+
 - ✅ `src/app/app.routes.ts` — routes `jobs`, `jobs/:id` ajoutées
 
 ---
 
-## 🔲 Module Candidate (Suite)
+## ✅ Module Candidate
+
+**Statut : TERMINÉ**
 
 ### 11. Liste Offres Candidate (/candidate/jobs)
 
@@ -200,26 +242,54 @@
 
 ### 15. Profil (/candidate/profile)
 
-🔲 profile.component.ts / .html / .scss
+✅ `src/app/features/candidate/profile/profile.component.ts`
+✅ `src/app/features/candidate/profile/profile.component.html`
+✅ `src/app/features/candidate/profile/profile.component.scss`
 
 ### Companion Changes (Phase 5)
+
 - ✅ `src/app/core/services/matching.service.ts` — ajout `getById()`, `deleteMatching()`
 - ✅ `src/app/app.routes.ts` — routes `matchings`, `matchings/:id` ajoutées
 - ✅ `src/styles.scss` — ajout classes `.badge-success`, `.badge-warning`, `.badge-danger`
+
+### Companion Changes (Phase 6)
+
+- ✅ `src/app/app.routes.ts` — route `profile` ajoutée
+
+### Companion Changes (Phase 6 — Édition Profil)
+
+- ✅ `src/app/core/models/user.model.ts` — ajout `avatarUrl`
+- ✅ `src/app/core/services/user.service.ts` — CRÉÉ: `updateProfile()`
+- ✅ `src/app/features/candidate/profile/profile.component.ts` — edition nom + avatar
+- ✅ `src/app/features/candidate/profile/profile.component.html` — template éditable
+- ✅ `src/app/shared/components/topbar/topbar.component.html` — affichage avatarUrl
+
+### 🚀 Amélioration UX — Upload CV inline + Matching automatique (Phase 6.5)
+
+- ✅ `src/app/core/services/cv.service.ts` — ajout `getStatus()`
+- ✅ `src/app/features/candidate/jobs/job-detail/candidate-job-detail.component.ts` — conversion signaux (suppression ChangeDetectorRef) + upload inline avec polling + matching automatique
+- ✅ `src/app/features/candidate/jobs/job-detail/candidate-job-detail.component.html` — nouveau popup multi-états : liste CVs, upload inline, polling PENDING/EXTRACTED/FAILED, auto-matching
+
 ---
 
 ## 🔲 Module Admin (Light Mode)
+
 **Statut : À FAIRE**
 
 ### 16. Admin Dashboard (/admin/dashboard)
+
 ### 17. Gestion Utilisateurs (/admin/users)
+
 ### 18. Gestion Offres (/admin/jobs)
+
 ### 19. Gestion Skills (/admin/skills)
+
 ### 20. Supervision Matchings (/admin/matches)
 
 ---
 
 ## Notes techniques
+
 - Standalone components UNIQUEMENT
 - Tailwind pour layout, SCSS pour effets custom
 - DevExtreme pour tous les composants UI interactifs

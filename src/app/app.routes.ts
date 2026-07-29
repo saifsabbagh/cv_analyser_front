@@ -26,6 +26,7 @@ export const routes: Routes = [
       { path: 'jobs/:id', loadComponent: () => import('./features/candidate/jobs/job-detail/candidate-job-detail.component').then(m => m.CandidateJobDetailComponent) },
       { path: 'matchings', loadComponent: () => import('./features/candidate/matchings/matchings.component').then(m => m.MatchingsComponent) },
       { path: 'matchings/:id', loadComponent: () => import('./features/candidate/matchings/matching-detail/matching-detail.component').then(m => m.MatchingDetailComponent) },
+      { path: 'profile', loadComponent: () => import('./features/candidate/profile/profile.component').then(m => m.ProfileComponent) },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
