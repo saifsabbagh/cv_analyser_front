@@ -1,0 +1,27 @@
+<div class="min-h-screen bg-bg flex">
+  <!-- Mobile overlay -->
+  @if (sidebarOpen()) {
+    <div
+      class="fixed inset-0 bg-black/50 z-20 lg:hidden"
+      (click)="closeSidebar()"
+    ></div>
+  }
+
+  <!-- Sidebar -->
+  <app-sidebar
+    [menuItems]="adminMenuItems"
+    [isOpen]="sidebarOpen()"
+    homeRoute="/admin/dashboard"
+    settingsRoute="/admin/settings"
+    [cta]="null"
+    (close)="closeSidebar()"
+  />
+
+  <!-- Main content area -->
+  <div class="flex-1 flex flex-col min-w-0 lg:ml-60">
+    <app-topbar (menuToggle)="toggleSidebar()" />
+    <main class="flex-1 p-4 md:p-6 overflow-auto">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

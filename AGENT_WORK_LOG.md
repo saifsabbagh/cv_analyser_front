@@ -272,19 +272,56 @@
 
 ---
 
-## 🔲 Module Admin (Light Mode)
+## 🔲 Module Admin
 
-**Statut : À FAIRE**
+**Statut : EN COURS (Dashboard + Utilisateurs terminés)**
+
+### Core Models
+
+- ✅ `src/app/core/models/admin.model.ts` — `AdminUser`, `UserFilters`, `PaginatedUsers`, `DashboardStats`
+
+### Core Services
+
+- ✅ `src/app/core/services/admin.service.ts` — `getUsers()`, `toggleUserActive()`, `changeUserRole()`, `getDashboardStats()`
+
+### Admin Layout Shell
+
+- ✅ `src/app/features/admin/layout/admin-layout.component.ts` + .html + .scss
+
+### Companion Changes (Layout)
+
+- ✅ `src/app/shared/components/sidebar/sidebar.component.ts` — input `menuItems` câblé + `homeRoute`, `settingsRoute`, `cta` (defaults candidate inchangés)
+- ✅ `src/app/shared/components/sidebar/sidebar.component.html` — rendu via `items()`, icônes `users` / `skills` ajoutées
+- ✅ `src/app/app.routes.ts` — bloc `admin` via AdminLayoutComponent, enfants lazy-loadés
 
 ### 16. Admin Dashboard (/admin/dashboard)
 
+- ✅ `src/app/features/admin/dashboard/admin-dashboard.component.ts` + .html + .scss
+- ✅ `src/app/features/admin/dashboard/components/account-status-panel/` .ts + .html + .scss
+- ✅ `src/app/features/admin/dashboard/components/recent-activity-panel/` .ts + .html + .scss — shell, aucun endpoint backend
+
 ### 17. Gestion Utilisateurs (/admin/users)
+
+- ✅ `src/app/features/admin/users/admin-users.component.ts` + .html + .scss
+- ✅ `src/app/features/admin/users/components/user-filters/` .ts + .html + .scss
+- ✅ `src/app/features/admin/users/components/user-stats-cards/` .ts + .html + .scss
+- ✅ `src/app/features/admin/users/components/users-table/` .ts + .html + .scss — dx-data-grid, pagination serveur
 
 ### 18. Gestion Offres (/admin/jobs)
 
+🔲 Placeholder standalone uniquement
+
 ### 19. Gestion Skills (/admin/skills)
 
+🔲 Placeholder standalone uniquement
+
 ### 20. Supervision Matchings (/admin/matches)
+
+🔲 Placeholder standalone uniquement
+
+### 21. Paramètres (/admin/settings)
+
+🔲 Placeholder standalone uniquement
 
 ---
 

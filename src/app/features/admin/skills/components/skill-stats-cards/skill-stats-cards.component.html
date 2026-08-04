@@ -1,0 +1,22 @@
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+  <app-kpi-card
+    icon="trending"
+    label="Compétences Totales"
+    [value]="stats()?.total ?? 0"
+    [loading]="loading()"
+  />
+  <app-kpi-card
+    icon="briefcase"
+    label="Utilisées dans les Offres"
+    [value]="stats()?.jobUsage ?? 0"
+    accentColor="info"
+    [loading]="loading()"
+  />
+  <app-kpi-card
+    icon="file-text"
+    label="Utilisées dans les CVs"
+    [value]="stats()?.cvUsage ?? 0"
+    accentColor="success"
+    [loading]="loading()"
+  />
+</div>

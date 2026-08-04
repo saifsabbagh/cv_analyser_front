@@ -5,7 +5,7 @@
 >
   <!-- Logo & Tagline -->
   <div class="px-5 pt-6 pb-4">
-    <a routerLink="/candidate/dashboard" class="flex items-center gap-2 no-underline" (click)="onClose()">
+    <a [routerLink]="homeRoute()" class="flex items-center gap-2 no-underline" (click)="onClose()">
       <span class="text-xl font-bold text-primary">📊 CV Intelligence</span>
     </a>
     <p class="text-xs text-text-secondary mt-1">Analyse & Matching</p>
@@ -13,7 +13,7 @@
 
   <!-- Navigation Menu -->
   <nav class="flex-1 px-3 space-y-1 overflow-y-auto">
-    @for (item of mainMenuItems; track item.route) {
+    @for (item of items(); track item.route) {
       <a
         [routerLink]="item.route"
         routerLinkActive="sidebar-item-active"
@@ -48,6 +48,16 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             }
+            @case ('users') {
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            }
+            @case ('skills') {
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+              </svg>
+            }
           }
         </span>
         <span>{{ item.label }}</span>
@@ -57,21 +67,23 @@
 
   <!-- Bottom Section -->
   <div class="px-3 pb-6 pt-4 border-t border-border mt-auto space-y-2">
-    <!-- Analyser un CV -->
-    <a
-      routerLink="/candidate/cv"
-      (click)="onClose()"
-      class="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary-hover transition-colors no-underline"
-    >
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-      </svg>
-      <span>+ Analyser un CV</span>
-    </a>
+    <!-- Action principale -->
+    @if (cta(); as action) {
+      <a
+        [routerLink]="action.route"
+        (click)="onClose()"
+        class="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary-hover transition-colors no-underline"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        <span>{{ action.label }}</span>
+      </a>
+    }
 
     <!-- Paramètres -->
     <a
-      routerLink="/candidate/profile"
+      [routerLink]="settingsRoute()"
       (click)="onClose()"
       class="sidebar-item"
     >

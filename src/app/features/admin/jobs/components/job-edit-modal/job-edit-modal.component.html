@@ -1,0 +1,91 @@
+<dx-popup
+  [visible]="visible()"
+  (visibleChange)="onVisibleChange($event)"
+  [showTitle]="true"
+  [title]="modalTitle"
+  [width]="520"
+  [maxWidth]="'95vw'"
+  [height]="'auto'"
+  [showCloseButton]="true"
+  [dragEnabled]="false"
+  [hideOnOutsideClick]="true"
+>
+  <div class="job-modal-body">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="job-modal-form">
+      <div class="form-field">
+        <label for="job-title" class="form-label">Titre</label>
+        <input
+          id="job-title"
+          type="text"
+          formControlName="title"
+          placeholder="Ex : Développeur Full Stack"
+          class="form-input"
+          [class.form-input--error]="isFieldInvalid('title')"
+        />
+        @if (isFieldInvalid('title')) {
+          <p class="form-error">Le titre est obligatoire (150 caractères max).</p>
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="job-description" class="form-label">Description</label>
+        <textarea
+          id="job-description"
+          formControlName="description"
+          rows="5"
+          placeholder="Décrivez le poste, les missions et le profil recherché..."
+          class="form-input form-textarea"
+          [class.form-input--error]="isFieldInvalid('description')"
+        ></textarea>
+        @if (isFieldInvalid('description')) {
+          <p class="form-error">La description est obligatoire.</p>
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="job-location" class="form-label">Localisation</label>
+        <input
+          id="job-location"
+          type="text"
+          formControlName="location"
+          placeholder="Ex : Tunis"
+          class="form-input"
+        />
+      </div>
+
+      <div class="form-field">
+        <label class="form-label">Compétences requises</label>
+        <dx-tag-box
+          [items]="skillNames()"
+          [value]="selectedSkills()"
+          (onValueChanged)="onSkillsChanged($event.value)"
+          [searchEnabled]="true"
+          [showSelectionControls]="false"
+          [acceptCustomValue]="true"
+          placeholder="Rechercher ou ajouter une compétence..."
+          [disabled]="skillsLoading()"
+          class="job-tag-box"
+        />
+        @if (skillsMissing) {
+          <p class="form-error">Ajoutez au moins une compétence.</p>
+        }
+      </div>
+
+      <div class="form-field form-field--row">
+        <label class="form-checkbox">
+          <input type="checkbox" formControlName="isActive" />
+          <span>Offre active</span>
+        </label>
+      </div>
+
+      <div class="job-modal-actions">
+        <button type="button" class="btn-cancel" (click)="onCancel()" [disabled]="saving()">
+          Annuler
+        </button>
+        <button type="submit" class="btn-save" [disabled]="saving()">
+          {{ saving() ? 'Enregistrement...' : 'Enregistrer' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</dx-popup>

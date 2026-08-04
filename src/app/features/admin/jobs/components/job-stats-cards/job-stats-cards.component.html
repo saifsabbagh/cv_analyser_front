@@ -1,0 +1,23 @@
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+  <app-kpi-card
+    icon="briefcase"
+    label="Offres Actives"
+    [value]="stats()?.active ?? 0"
+    accentColor="success"
+    [loading]="loading()"
+  />
+  <app-kpi-card
+    icon="users"
+    label="Candidats Matchés"
+    [value]="stats()?.matchedCandidates ?? 0"
+    accentColor="info"
+    [loading]="loading()"
+  />
+  <app-kpi-card
+    icon="briefcase"
+    label="Offres Inactives"
+    [value]="stats()?.inactive ?? 0"
+    accentColor="warning"
+    [loading]="loading()"
+  />
+</div>

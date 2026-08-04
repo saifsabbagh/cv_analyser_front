@@ -1,0 +1,141 @@
+<div class="space-y-6">
+  <!-- En-tête -->
+  <div class="jobs-header">
+    <div>
+      <h1 class="jobs-title">Gestion des offres</h1>
+      <p class="jobs-subtitle">Créez et administrez les offres d'emploi de la plateforme</p>
+    </div>
+    <button type="button" class="btn-add-job" (click)="openCreate()">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
+      <span>Nouvelle Offre</span>
+    </button>
+  </div>
+
+  <!-- KPIs -->
+  <app-job-stats-cards [stats]="stats()" [loading]="statsLoading()" />
+
+  <!-- Recherche -->
+  <div class="jobs-search-bar">
+    <div class="search-wrapper">
+      <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+      <input
+        type="text"
+        [formControl]="searchControl"
+        placeholder="Rechercher une offre..."
+        class="search-input"
+      />
+    </div>
+  </div>
+
+  <!-- Erreur -->
+  @if (error(); as err) {
+    <div class="error-banner">
+      <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>{{ err }}</span>
+    </div>
+  }
+
+  <!-- Chargement -->
+  @if (isLoading()) {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+        <div class="job-skeleton"></div>
+      }
+    </div>
+  }
+
+  <!-- Vide -->
+  @if (!isLoading() && !error() && jobs().length === 0) {
+    <div class="empty-state">
+      <p>Aucune offre trouvée.</p>
+    </div>
+  }
+
+  <!-- Grille -->
+  @if (!isLoading() && jobs().length > 0) {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      @for (job of jobs(); track job.id) {
+        <app-job-card
+          [job]="job"
+          (edit)="openEdit($event)"
+          (view)="openEdit($event)"
+          (remove)="askDelete($event)"
+        />
+      }
+    </div>
+
+    @if (totalPages() > 1) {
+      <div class="pagination">
+        <button
+          type="button"
+          class="page-btn"
+          (click)="prevPage()"
+          [disabled]="page() === 1"
+        >
+          Précédent
+        </button>
+        <span class="page-info">Page {{ page() }} / {{ totalPages() }}</span>
+        <button
+          type="button"
+          class="page-btn"
+          (click)="nextPage()"
+          [disabled]="page() === totalPages()"
+        >
+          Suivant
+        </button>
+      </div>
+    }
+  }
+
+  <!-- Modal création / édition -->
+  <app-job-edit-modal
+    [visible]="modalVisible()"
+    [job]="editingJob()"
+    [saving]="saving()"
+    (saved)="onSave($event)"
+    (closed)="closeModal()"
+  />
+
+  <!-- Confirmation suppression -->
+  <dx-popup
+    [visible]="deleteVisible()"
+    (visibleChange)="onDeleteVisibleChange($event)"
+    [showTitle]="true"
+    title="Confirmer la suppression"
+    [width]="400"
+    [height]="'auto'"
+    [showCloseButton]="true"
+    [dragEnabled]="false"
+    [hideOnOutsideClick]="true"
+  >
+    <div class="delete-body">
+      <p class="delete-text">
+        Voulez-vous vraiment supprimer l'offre
+        <strong>{{ jobToDelete()?.title }}</strong> ?
+      </p>
+      <div class="delete-actions">
+        <button type="button" class="btn-cancel" (click)="cancelDelete()" [disabled]="deleting()">
+          Annuler
+        </button>
+        <button type="button" class="btn-danger" (click)="confirmDelete()" [disabled]="deleting()">
+          {{ deleting() ? 'Suppression...' : 'Oui, supprimer' }}
+        </button>
+      </div>
+    </div>
+  </dx-popup>
+
+  <!-- Toast -->
+  <dx-toast
+    [visible]="toastVisible()"
+    (visibleChange)="toastVisible.set($event)"
+    [message]="toastMessage()"
+    [type]="toastType()"
+    [displayTime]="3000"
+  />
+</div>

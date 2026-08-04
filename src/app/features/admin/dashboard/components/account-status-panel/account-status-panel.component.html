@@ -1,0 +1,33 @@
+<div class="status-panel">
+  <h3 class="status-panel-title">État des comptes</h3>
+
+  <div class="space-y-5">
+    <!-- Utilisateurs actifs -->
+    <div>
+      <div class="status-row">
+        <span class="status-label">Utilisateurs Actifs</span>
+        <span class="status-value">{{ activeCount() }} ({{ activePercent() }} %)</span>
+      </div>
+      <div class="progress-track">
+        <div
+          class="progress-fill progress-fill--active"
+          [style.width.%]="activePercent()"
+        ></div>
+      </div>
+    </div>
+
+    <!-- Comptes désactivés -->
+    <div>
+      <div class="status-row">
+        <span class="status-label">Comptes Désactivés</span>
+        <span class="status-value">{{ inactiveCount() }} ({{ inactivePercent() }} %)</span>
+      </div>
+      <div class="progress-track">
+        <div
+          class="progress-fill progress-fill--inactive"
+          [style.width.%]="inactivePercent()"
+        ></div>
+      </div>
+    </div>
+  </div>
+</div>

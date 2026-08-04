@@ -1,0 +1,99 @@
+<div class="users-table">
+  @if (loading()) {
+    <div class="table-loading-overlay">
+      <div class="table-spinner"></div>
+    </div>
+  }
+
+  <dx-data-grid
+    [dataSource]="dataSource"
+    [showBorders]="false"
+    [showRowLines]="true"
+    [hoverStateEnabled]="true"
+    [columnAutoWidth]="true"
+    [columnHidingEnabled]="true"
+    [remoteOperations]="{ paging: true }"
+    (onOptionChanged)="onOptionChanged($event)"
+    class="users-grid"
+  >
+    <dxo-paging [pageSize]="limit()" [pageIndex]="page() - 1" />
+    <dxo-pager
+      [visible]="true"
+      [showInfo]="true"
+      [showNavigationButtons]="true"
+      [showPageSizeSelector]="true"
+      [allowedPageSizes]="[10, 25, 50]"
+      infoText="Page {0} sur {1} ({2} utilisateurs)"
+    />
+    <dxo-sorting mode="none" />
+    <dxo-load-panel [enabled]="false" />
+
+    <dxi-column dataField="name" caption="Nom" cellTemplate="nameCell" [hidingPriority]="5" />
+    <dxi-column dataField="email" caption="Email" [hidingPriority]="2" />
+    <dxi-column dataField="role" caption="Rôle" cellTemplate="roleCell" [width]="120" [hidingPriority]="4" />
+    <dxi-column dataField="isActive" caption="Statut" cellTemplate="statusCell" [width]="150" [hidingPriority]="3" />
+    <dxi-column dataField="createdAt" caption="Date d'inscription" cellTemplate="dateCell" [width]="150" [hidingPriority]="1" />
+    <dxi-column caption="Actions" cellTemplate="actionsCell" [width]="130" [allowSorting]="false" [hidingPriority]="6" />
+
+    <!-- Nom + avatar -->
+    <div *dxTemplate="let cell of 'nameCell'" class="cell-name">
+      @if (cell.data.avatarUrl) {
+        <img [src]="cell.data.avatarUrl" class="cell-avatar" alt="Photo de profil" />
+      } @else {
+        <div class="cell-avatar cell-avatar--initials">{{ getInitials(cell.data.name) }}</div>
+      }
+      <span class="cell-name-text">{{ cell.data.name }}</span>
+    </div>
+
+    <!-- Rôle -->
+    <div *dxTemplate="let cell of 'roleCell'">
+      <span [class]="cell.data.role === 'ADMIN' ? 'role-badge role-badge--admin' : 'role-badge role-badge--candidate'">
+        {{ getRoleLabel(cell.data.role) }}
+      </span>
+    </div>
+
+    <!-- Statut : switch + badge -->
+    <div *dxTemplate="let cell of 'statusCell'" class="cell-status">
+      <dx-switch
+        [value]="cell.data.isActive"
+        (onValueChanged)="onToggleActive(cell.data)"
+        [hint]="cell.data.isActive ? 'Désactiver le compte' : 'Activer le compte'"
+      />
+      <span [class]="cell.data.isActive ? 'badge-success' : 'badge-danger'">
+        {{ cell.data.isActive ? 'Actif' : 'Désactivé' }}
+      </span>
+    </div>
+
+    <!-- Date d'inscription -->
+    <div *dxTemplate="let cell of 'dateCell'">
+      {{ cell.data.createdAt | date: 'dd/MM/yyyy' }}
+    </div>
+
+    <!-- Actions -->
+    <div *dxTemplate="let cell of 'actionsCell'" class="cell-actions">
+      @if (editingUserId() === cell.data.id) {
+        <select
+          class="role-select"
+          [value]="cell.data.role"
+          (change)="onRoleSelected(cell.data, $any($event.target).value)"
+          aria-label="Changer le rôle"
+        >
+          <option value="ADMIN">Admin</option>
+          <option value="CANDIDATE">Candidat</option>
+        </select>
+      } @else {
+        <button
+          type="button"
+          class="action-btn"
+          (click)="startRoleEdit(cell.data.id)"
+          title="Changer le rôle"
+          aria-label="Changer le rôle"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+        </button>
+      }
+    </div>
+  </dx-data-grid>
+</div>

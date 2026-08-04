@@ -30,7 +30,19 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
-  { path: 'admin', canActivate: [authGuard, roleGuard('ADMIN')],
-    children: [] },
+  {
+    path: 'admin',
+    canActivate: [authGuard, roleGuard('ADMIN')],
+    loadComponent: () => import('./features/admin/layout/admin-layout.component').then(m => m.AdminLayoutComponent),
+    children: [
+      { path: 'dashboard', loadComponent: () => import('./features/admin/dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent) },
+      { path: 'users', loadComponent: () => import('./features/admin/users/admin-users.component').then(m => m.AdminUsersComponent) },
+      { path: 'jobs', loadComponent: () => import('./features/admin/jobs/admin-jobs.component').then(m => m.AdminJobsComponent) },
+      { path: 'skills', loadComponent: () => import('./features/admin/skills/admin-skills.component').then(m => m.AdminSkillsComponent) },
+      { path: 'matches', loadComponent: () => import('./features/admin/matches/admin-matches.component').then(m => m.AdminMatchesComponent) },
+      { path: 'settings', loadComponent: () => import('./features/admin/settings/admin-settings.component').then(m => m.AdminSettingsComponent) },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+    ]
+  },
   { path: '**', redirectTo: '' }
 ];

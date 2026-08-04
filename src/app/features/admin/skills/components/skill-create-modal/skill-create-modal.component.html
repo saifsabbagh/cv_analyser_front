@@ -1,0 +1,37 @@
+<dx-popup
+  [visible]="visible()"
+  (visibleChange)="onVisibleChange($event)"
+  [showTitle]="true"
+  title="Ajouter une compétence"
+  [width]="420"
+  [height]="'auto'"
+  [showCloseButton]="true"
+  [dragEnabled]="false"
+  [hideOnOutsideClick]="true"
+  class="skill-modal"
+>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="skill-modal-body">
+    <label for="skill-name" class="skill-modal-label">Nom de la compétence</label>
+    <input
+      id="skill-name"
+      type="text"
+      formControlName="name"
+      placeholder="Ex : typescript"
+      class="skill-modal-input"
+      [class.skill-modal-input--error]="isNameInvalid"
+      autocomplete="off"
+    />
+    @if (isNameInvalid) {
+      <p class="skill-modal-error">Le nom est obligatoire (100 caractères maximum).</p>
+    }
+
+    <div class="skill-modal-actions">
+      <button type="button" class="btn-cancel" (click)="onCancel()" [disabled]="saving()">
+        Annuler
+      </button>
+      <button type="submit" class="btn-save" [disabled]="saving()">
+        {{ saving() ? 'Enregistrement...' : 'Enregistrer' }}
+      </button>
+    </div>
+  </form>
+</dx-popup>

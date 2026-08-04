@@ -1,0 +1,21 @@
+<div class="activity-panel">
+  <h3 class="activity-panel-title">Activité Récente</h3>
+
+  @if (activities().length === 0) {
+    <div class="activity-empty">
+      <svg class="activity-empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <p>Aucune activité récente</p>
+    </div>
+  } @else {
+    <ul class="activity-list">
+      @for (activity of activities(); track activity.label) {
+        <li class="activity-item">
+          <span class="activity-label">{{ activity.label }}</span>
+          <span class="activity-date">{{ activity.date }}</span>
+        </li>
+      }
+    </ul>
+  }
+</div>

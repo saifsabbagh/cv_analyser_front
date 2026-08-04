@@ -1,0 +1,68 @@
+<div class="space-y-6">
+  <!-- Error state -->
+  @if (error(); as err) {
+    <div class="error-banner">
+      <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>{{ err }}</span>
+    </div>
+  }
+
+  <!-- KPIs Row -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <app-kpi-card
+      icon="users"
+      label="Total Utilisateurs"
+      [value]="totalUsers()"
+      [loading]="loading()"
+    />
+    <app-kpi-card
+      icon="briefcase"
+      label="Total Offres Actives"
+      [value]="activeJobs()"
+      accentColor="info"
+      [loading]="loading()"
+    />
+    <app-kpi-card
+      icon="file-text"
+      label="CVs Analysés"
+      [value]="totalCvs()"
+      accentColor="primary"
+      [loading]="loading()"
+    />
+    <app-kpi-card
+      icon="target"
+      label="Score Moyen Matching"
+      [value]="avgScorePercent() + '%'"
+      accentColor="success"
+      [loading]="loading()"
+    />
+  </div>
+
+  <!-- Charts Row -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <app-bar-chart-widget
+      title="CVs par statut"
+      [data]="cvsByStatus()"
+      argumentField="statut"
+      valueField="count"
+      [loading]="loading()"
+    />
+    <app-donut-chart-widget
+      title="Répartition des rôles"
+      [data]="roleDistribution()"
+      argumentField="role"
+      valueField="valeur"
+      [loading]="loading()"
+    />
+  </div>
+
+  <!-- Panels Row -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    @if (accountStats(); as users) {
+      <app-account-status-panel [stats]="users" />
+    }
+    <app-recent-activity-panel />
+  </div>
+</div>
