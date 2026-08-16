@@ -1,0 +1,125 @@
+<div class="matches-table">
+  @if (loading()) {
+    <div class="table-loading-overlay">
+      <div class="table-spinner"></div>
+    </div>
+  }
+
+  <dx-data-grid
+    [dataSource]="dataSource"
+    [showBorders]="false"
+    [showRowLines]="true"
+    [hoverStateEnabled]="true"
+    [columnAutoWidth]="true"
+    [columnHidingEnabled]="true"
+    [remoteOperations]="{ paging: true }"
+    (onOptionChanged)="onOptionChanged($event)"
+    class="matches-grid"
+  >
+    <dxo-paging [pageSize]="limit()" [pageIndex]="page() - 1" />
+    <dxo-pager
+      [visible]="true"
+      [showInfo]="true"
+      [showNavigationButtons]="true"
+      [showPageSizeSelector]="true"
+      [allowedPageSizes]="[10, 25, 50]"
+      infoText="Page {0} sur {1} ({2} matchings)"
+    />
+    <dxo-load-panel [enabled]="false" />
+
+    <dxi-column dataField="user.name" caption="Candidat" cellTemplate="candidateCell" [allowSorting]="false" [hidingPriority]="5" />
+    <dxi-column dataField="job.title" caption="Offre Ciblée" [allowSorting]="false" [hidingPriority]="2" />
+    <dxi-column dataField="scorePercent" caption="Score Global" cellTemplate="scoreCell" [sortOrder]="'desc'" [sortIndex]="0" [width]="160" [hidingPriority]="4" />
+    <dxi-column dataField="missingSkills" caption="Compétences Manquantes" cellTemplate="missingSkillsCell" [allowSorting]="false" [width]="260" [hidingPriority]="1" />
+    <dxi-column dataField="createdAt" caption="Date d'Analyse" cellTemplate="dateCell" [allowSorting]="false" [width]="140" [hidingPriority]="3" />
+    <dxi-column caption="Actions" cellTemplate="actionsCell" [width]="120" [allowSorting]="false" [hidingPriority]="6" />
+
+    <!-- Candidat -->
+    <div *dxTemplate="let cell of 'candidateCell'" class="cell-candidate">
+      @if (cell.data.user.avatarUrl) {
+        <img [src]="cell.data.user.avatarUrl" class="cell-avatar" alt="Photo de profil" />
+      } @else {
+        <div class="cell-avatar cell-avatar--initials">{{ getInitials(cell.data.user.name) }}</div>
+      }
+      <div class="cell-candidate-info">
+        <span class="cell-candidate-name">{{ cell.data.user.name }}</span>
+        <span class="cell-candidate-email">{{ cell.data.user.email }}</span>
+      </div>
+    </div>
+
+    <!-- Score global : jauge + badge -->
+    <div *dxTemplate="let cell of 'scoreCell'" class="cell-score">
+      <dx-circular-gauge
+        [value]="cell.data.scorePercent"
+        [size]="{ width: 56, height: 56 }"
+      >
+        <dxo-scale [startValue]="0" [endValue]="100" [tickInterval]="25"></dxo-scale>
+        <dxo-range-container>
+          <dxi-range [startValue]="0" [endValue]="40" [color]="dangerHex"></dxi-range>
+          <dxi-range [startValue]="40" [endValue]="70" [color]="warningHex"></dxi-range>
+          <dxi-range [startValue]="70" [endValue]="100" [color]="successHex"></dxi-range>
+        </dxo-range-container>
+        <dxo-value-indicator [color]="scoreColorHex(cell.data.scorePercent)" type="rangeBar"></dxo-value-indicator>
+      </dx-circular-gauge>
+      <span [class]="scoreBadgeClass(cell.data.scorePercent)">{{ cell.data.scorePercent }}%</span>
+    </div>
+
+    <!-- Compétences manquantes -->
+    <div *dxTemplate="let cell of 'missingSkillsCell'" class="cell-skills">
+      @for (skill of getMissingSkills(cell.data).slice(0, 3); track $index) {
+        <span class="skill-chip">{{ skill }}</span>
+      }
+      @if (getMissingExtra(cell.data) > 0) {
+        <span class="skill-chip skill-chip--more">+{{ getMissingExtra(cell.data) }}</span>
+      }
+      @if (getMissingSkills(cell.data).length === 0) {
+        <span class="cell-skills-empty">Aucune</span>
+      }
+    </div>
+
+    <!-- Date d'analyse -->
+    <div *dxTemplate="let cell of 'dateCell'">
+      {{ cell.data.createdAt | date: 'dd/MM/yyyy' }}
+    </div>
+
+    <!-- Actions -->
+    <div *dxTemplate="let cell of 'actionsCell'" class="cell-actions">
+      <button
+        type="button"
+        class="action-btn"
+        (click)="onViewProfile(cell.data)"
+        title="Voir le profil du candidat"
+        aria-label="Voir le profil du candidat"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>
+      </button>
+      @if (cell.data.archived) {
+        <button
+          type="button"
+          class="action-btn"
+          (click)="onArchiveToggle(cell.data)"
+          title="Désarchiver ce matching"
+          aria-label="Désarchiver ce matching"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16M4 7l1.2 12.1A2 2 0 007.2 21h9.6a2 2 0 002-1.9L20 7M12 17V9m0 0l-2.5 2.5M12 9l2.5 2.5" />
+          </svg>
+        </button>
+      } @else {
+        <button
+          type="button"
+          class="action-btn"
+          (click)="onArchiveToggle(cell.data)"
+          title="Archiver ce matching"
+          aria-label="Archiver ce matching"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16M4 7l1.2 12.1A2 2 0 007.2 21h9.6a2 2 0 002-1.9L20 7M12 11v6m0 0l-2.5-2.5M12 17l2.5-2.5" />
+          </svg>
+        </button>
+      }
+    </div>
+  </dx-data-grid>
+</div>

@@ -1,0 +1,32 @@
+<div class="podium-panel">
+  <div class="podium-header">
+    <div>
+      <h2 class="podium-title">Meilleurs candidats</h2>
+      <p class="podium-subtitle">Top 3 pour l'offre sélectionnée</p>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="podium-loading">
+      <div class="podium-spinner"></div>
+    </div>
+  } @else if (error(); as err) {
+    <p class="podium-error">{{ err }}</p>
+  } @else if (candidates().length === 0) {
+    <p class="podium-empty">Aucun candidat classé pour cette offre.</p>
+  } @else {
+    <div class="podium-grid">
+      @for (candidate of candidates().slice(0, 3); track candidate.userId) {
+        <div class="podium-card">
+          <span [class]="getRankClass(candidate.rank)">{{ candidate.rank }}</span>
+          <div class="podium-avatar">{{ getInitials(candidate.userName) }}</div>
+          <p class="podium-name">{{ candidate.userName }}</p>
+          <p class="podium-score" [style.color]="getScoreColor(candidate.scorePercent)">
+            {{ candidate.scorePercent }}%
+          </p>
+          <p class="podium-excerpt">{{ getRecommendationExcerpt(candidate.recommendations) }}</p>
+        </div>
+      }
+    </div>
+  }
+</div>

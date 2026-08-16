@@ -10,7 +10,8 @@ import {
   DashboardStats,
   MatchFilters,
   PaginatedMatches,
-  TopCandidate
+  TopCandidate,
+  AdminMatchResult
 } from '../models/admin.model';
 
 @Injectable({ providedIn: 'root' })
@@ -72,6 +73,7 @@ export class AdminService {
     if (filters.jobId !== undefined) httpParams = httpParams.set('jobId', filters.jobId);
     if (filters.minScore !== undefined) httpParams = httpParams.set('minScore', filters.minScore);
     if (filters.maxScore !== undefined) httpParams = httpParams.set('maxScore', filters.maxScore);
+    if (filters.archived !== undefined) httpParams = httpParams.set('archived', filters.archived);
     if (filters.page !== undefined) httpParams = httpParams.set('page', filters.page);
     if (filters.limit !== undefined) httpParams = httpParams.set('limit', filters.limit);
 
@@ -92,6 +94,16 @@ export class AdminService {
       map(res => res.data as TopCandidate[]),
       catchError(err => {
         const message = err.error?.message || 'Erreur lors du chargement des meilleurs candidats';
+        return throwError(() => new Error(message));
+      })
+    );
+  }
+
+  toggleMatchArchived(id: number): Observable<AdminMatchResult> {
+    return this.http.patch<any>(`${this.BASE_URL}/matches/${id}/toggle-archived`, {}).pipe(
+      map(res => res.data as AdminMatchResult),
+      catchError(err => {
+        const message = err.error?.message || 'Erreur lors de la modification du statut d\'archivage';
         return throwError(() => new Error(message));
       })
     );

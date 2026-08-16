@@ -52,9 +52,11 @@ export interface DashboardStats {
 }
 
 export interface MatchFilters {
+  search?: string;
   jobId?: number;
   minScore?: number;
   maxScore?: number;
+  archived?: boolean;
   page?: number;
   limit?: number;
 }
@@ -66,6 +68,7 @@ export interface AdminMatchResult {
   matchedSkills: string[];
   missingSkills: string[];
   recommendations: string;
+  archived: boolean;
   createdAt: string;
   cv: {
     filename: string;
@@ -76,6 +79,7 @@ export interface AdminMatchResult {
   user: {
     name: string;
     email: string;
+    avatarUrl?: string | null;
   };
 }
 
@@ -100,5 +104,6 @@ export interface TopCandidate {
   scorePercent: number;
   matchedSkills: string[];
   missingSkills: string[];
+  recommendations: string;
   createdAt: string;
 }

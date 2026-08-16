@@ -1,0 +1,51 @@
+<div class="space-y-6">
+  <!-- En-tête -->
+  <div class="matches-header">
+    <div>
+      <h1 class="matches-title">Supervision des matchings</h1>
+      <p class="matches-subtitle">Analysez les correspondances entre candidats et offres d'emploi</p>
+    </div>
+  </div>
+
+  <!-- Cartes statistiques -->
+  <app-match-stats-cards [stats]="stats()" [loading]="statsLoading()" />
+
+  <!-- Filtres -->
+  <app-match-filters (filtersChange)="onFiltersChange($event)" />
+
+  <!-- Meilleurs candidats (uniquement si un poste spécifique est sélectionné) -->
+  @if (selectedJobId(); as jobId) {
+    <app-top-candidates-panel [jobId]="jobId" />
+  }
+
+  <!-- Erreur -->
+  @if (error(); as err) {
+    <div class="error-banner">
+      <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>{{ err }}</span>
+    </div>
+  }
+
+  <!-- Tableau -->
+  <app-matches-table
+    [matches]="displayMatches()"
+    [total]="total()"
+    [page]="page()"
+    [limit]="limit()"
+    [loading]="isLoading()"
+    (archiveToggle)="onArchiveToggle($event)"
+    (viewProfile)="onViewProfile()"
+    (pageChange)="onPageChange($event)"
+  />
+
+  <!-- Notifications -->
+  <dx-toast
+    [visible]="toastVisible()"
+    (visibleChange)="toastVisible.set($event)"
+    [message]="toastMessage()"
+    [type]="toastType()"
+    [displayTime]="3000"
+  />
+</div>

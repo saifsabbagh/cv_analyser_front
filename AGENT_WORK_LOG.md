@@ -317,7 +317,15 @@
 
 ### 20. Supervision Matchings (/admin/matches)
 
-🔲 Placeholder standalone uniquement
+✅ `src/app/features/admin/matches/admin-matches.component.ts` + .html + .scss — container : filtres + stats + top-candidates + table, pagination serveur, archive toggle (retrait local + toast)
+✅ `src/app/features/admin/matches/components/match-filters/` .ts + .html + .scss — offre (JobService), scores min/max 0-100, recherche candidat, statut Actifs/Archivés
+✅ `src/app/features/admin/matches/components/match-stats-cards/` .ts + .html + .scss — Matchings Totaux + Score Moyen (getDashboardStats)
+✅ `src/app/features/admin/matches/components/matches-table/` .ts + .html + .scss — dx-data-grid, jauge + badge score, chips compétences manquantes, actions Voir Profil + archive/désarchive
+✅ `src/app/features/admin/matches/components/top-candidates-panel/` .ts + .html + .scss — podium top 3 (getTopCandidates) si job sélectionné
+
+Companion Changes (PROMPT 6bis + 7 + 10) :
+- ✅ `src/app/core/models/admin.model.ts` — `archived` (AdminMatchResult), `archived?` + `search?` (MatchFilters), `recommendations` (TopCandidate), `avatarUrl?` (match.user)
+- ✅ `src/app/core/services/admin.service.ts` — ajout `toggleMatchArchived()`, passage de `archived` dans `getAllMatches()`
 
 ### 21. Paramètres (/admin/settings)
 
