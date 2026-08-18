@@ -16,17 +16,17 @@
 }
 
 [data-theme="dark"] {
-  --color-bg: #0F172A;
-  --color-surface: #1E293B;
-  --color-surface-alt: #273449;
-  --color-primary: #4C6FE0;
-  --color-primary-hover: #3D5BC7;
-  --color-accent: #3AC17A;
-  --color-accent-hover: #2FA867;
-  --color-text: #F1F5F9;
-  --color-text-secondary: #94A3B8;
-  --color-border: #334155;
-  --color-error: #F87171;
-  --color-success: #4ADE80;
-  --color-warning: #FBBF24;
+  --color-bg: #16202E;              /* mn #0F172A - chwaya afta7, moins agressif */
+  --color-surface: #212D3F;          /* mn #1E293B - afta7 chwaya */
+  --color-surface-alt: #2A3850;      /* mn #273449 */
+  --color-primary: #6685E8;          /* mn #4C6FE0 - afta7 w akther readable */
+  --color-primary-hover: #5673D4;    /* mn #3D5BC7 */
+  --color-accent: #4FCB8C;           /* mn #3AC17A - afta7 chwaya */
+  --color-accent-hover: #42B87A;     /* mn #2FA867 */
+  --color-text: #E4E9F0;             /* mn #F1F5F9 - naqasna el brightness, moins de glow */
+  --color-text-secondary: #A3B3C7;   /* mn #94A3B8 - afta7 bech contrast a7sen */
+  --color-border: #3A4A63;           /* mn #334155 - afta7 barcha bech yban */
+  --color-error: #FF8A8A;            /* mn #F87171 - afta7 chwaya, moins agressif */
+  --color-success: #5FE196;          /* mn #4ADE80 */
+  --color-warning: #FFC94D;          /* mn #FBBF24 */
 }
