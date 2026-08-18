@@ -1,8 +1,43 @@
-# CvAnalyser
+# CV Analyser
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.15.
+CV Analyser is a web application that helps users analyze and get insights on their resumes/CVs. This repository contains the **frontend**, built with [Angular](https://angular.dev/).
 
-## Development server
+## ✨ Features
+
+- Modern, responsive UI with light/dark theme support
+- CV upload and analysis workflow
+- Clean and accessible design system (CSS custom properties for theming)
+
+> Update this list with the actual features of your app.
+
+## 🛠️ Tech Stack
+
+- **Framework:** Angular (v21)
+- **Language:** TypeScript
+- **Styling:** SCSS
+- **Testing:** Vitest (unit tests)
+- **Deployment:** [Vercel](https://vercel.com/)
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (LTS recommended)
+- [Angular CLI](https://angular.dev/tools/cli) installed globally:
+
+```bash
+npm install -g @angular/cli
+```
+
+### Installation
+
+```bash
+git clone <repo-url>
+cd cv-analyser
+npm install
+```
+
+### Development server
 
 To start a local development server, run:
 
@@ -12,7 +47,7 @@ ng serve
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
-## Code scaffolding
+## 🧩 Code Scaffolding
 
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
 
@@ -26,25 +61,25 @@ For a complete list of available schematics (such as `components`, `directives`,
 ng generate --help
 ```
 
-## Building
+## 📦 Building
 
-To build the project run:
+To build the project for production, run:
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+This compiles the project and stores the build artifacts in the `dist/cv-analyser/browser/` directory. The production build is optimized for performance and speed.
 
-## Running unit tests
+## ✅ Running Unit Tests
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use:
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
+## 🔄 Running End-to-End Tests
 
 For end-to-end (e2e) testing, run:
 
@@ -52,8 +87,47 @@ For end-to-end (e2e) testing, run:
 ng e2e
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+> Angular CLI does not include an e2e testing framework by default. You can choose one that suits your needs (e.g. Playwright, Cypress).
 
-## Additional Resources
+## ☁️ Deployment (Vercel)
+
+This project is deployed on [Vercel](https://vercel.com/). Key configuration:
+
+| Setting | Value |
+|---|---|
+| Build Command | `ng build` |
+| Output Directory | `dist/cv-analyser/browser` |
+| Install Command | `npm install` |
+
+A `vercel.json` file is included at the project root to correctly handle Angular's client-side routing (SPA rewrites):
+
+```json
+{
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
+```
+
+## 📁 Project Structure
+
+```
+cv-analyser/
+├── src/
+│   ├── app/
+│   ├── assets/
+│   └── styles/
+├── vercel.json
+├── angular.json
+└── package.json
+```
+
+## 📚 Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## 📝 License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+
+> Update this section according to your project's actual license.
